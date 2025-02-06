@@ -1,0 +1,46 @@
+{
+    "name": "vscode-scalajs-hello",
+    "displayName": "vscode-scalajs-hello",
+    "description": "",
+    "version": "0.0.1",
+    "publisher": "test",
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension",
+    "engines": {
+        "vscode": "^1.84.0"
+    },
+    "dependencies": {
+        "node-fetch": "2.6.0",
+        "vscode-languageclient": "9.0.1"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.73.0"
+    },
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.helloWorld",
+                "title": "Hello World"
+            }
+        ],
+        "menus": {
+            "file/newFile": [
+                {
+                    "command": "extension.helloWorld",
+                    "group": "navigation"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "extension.helloWorld",
+                    "group": "1_modification"
+                }
+            ]
+        }
+    }
+}

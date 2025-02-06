@@ -1,0 +1,40 @@
+package-lock.json
+
+# Logs
+logs
+*.log
+
+node_modules
+dist
+dist-ssr
+*.local
+vite.config.js.timestamp*
+
+# Editor directories and files
+.vscode
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Scala
+target/
+metals.sbt
+.bloop/
+.bsp/
+.metals/
+out/
+/.metals/
+/target/
+/.idea/
+out
+/.bloop/
+/project/.bloop/
+/project/metals.sbt
+/project/project/
+/project/target/
+/.bsp/
+

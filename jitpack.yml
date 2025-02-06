@@ -1,0 +1,4 @@
+before_install:
+   - sdk install npm
+install:
+   - sbt +publishM2

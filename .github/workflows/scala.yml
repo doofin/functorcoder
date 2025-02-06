@@ -1,0 +1,32 @@
+name: Continuous Integration
+
+on:
+  push:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  run:
+    name: Build and Run
+    strategy:
+      matrix:
+        java-version: [17]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java-version }}
+          cache: sbt
+
+      - uses: sbt/setup-sbt@v1
+
+      - name: compile
+        run: sbt compile
