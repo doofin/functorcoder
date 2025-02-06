@@ -1,11 +1,56 @@
-# VSCode Extension in Scala.js
-Write vscode extensions in Scala.js! This is a collection of examples and templates to get you started, with convenient sbt tasks to build and run your extension.
+# functorcoder
+Open source AI coding assistant "**functorcoder**" is a AI coding assistant utilizing LLM (Large Language Model) with algebraic and modular design.
 
-contains:
-- commands from the vscode command palette
-- inline completion like github copilot
-- language server protocol client
-- code actions (when pressing Alt+Enter at a code location)
+features:
+- code generation: completion, documentation
+- code modification: refactoring, optimization, bug fixing
+- code analysis: code understanding, code review, code quality
+
+we think in mathematics, algebra and functional programming.
+
+    Input = {Query, CodeSnippet, Spec}: The set of all possible input types (queries, code snippets, or requirements/specifications).
+
+    Output = {Code, Explanation, Transformation, DebugSuggestion}: The set of all possible outputs.
+
+The types and objects for Input:
+- code snippet or code file: a piece of code
+- code context: a code snippet with its surrounding code
+- query: natural language query 
+- specification: natural language specification
+
+The Output:
+- code snippet or code file: a piece of code, including completion, refactoring, optimization, bug fixing
+- explanation: a natural language explanation
+- transformation: the transformation of the input code
+- suggestion: a suggestion for debugging or improvement or refactoring
+
+
+## Project Structure
+
+```bash
+/ai-coding-assistant
+├── /src
+│   ├── /core
+│   │   ├── AIEngine.scala         # Core engine with main orchestration logic
+│   │   └── Utils.scala            # Helper utilities
+│   ├── /actions
+│   │   ├── CodeCompletion.scala   # Code completion module
+│   │   ├── Refactor.scala         # Refactor code module
+│   │   └── Debug.scala            # Debugging module
+│   ├── /types
+│   │   ├── InputTypes.scala     # Types for code, context, and user actions
+│   │   └── OutputTypes.scala      # Types for output (formatted code, suggestions)
+│   ├── /editorUI
+│   │   ├── EditorIntegration.scala# Integration with the editor (e.g., VSCode)
+│   └── /tests
+│       ├── CoreTests.scala         # Unit tests for core modules
+│       ├── ActionTests.scala       # Unit tests for actions like code completion
+│       └── EditorTests.scala      # Tests for editor integration
+└── /docs
+    ├── README.md                 # Project overview and setup instructions
+    ├── ARCHITECTURE.md           # Architecture details and design decisions
+    └── API.md                    # API documentation for integration
+```
 
 ### Setup
 Requirements:
