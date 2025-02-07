@@ -26,10 +26,12 @@ The Output:
 
 
 ## Project Structure
+package name: com.functorcoder
 
+project file structure:
 ```bash
-/ai-coding-assistant
-├── /src
+/functorcoder
+├── /src/main/scala/functorcoder
 │   ├── /core
 │   │   ├── AIEngine.scala         # Core engine with main orchestration logic
 │   │   └── Utils.scala            # Helper utilities
@@ -50,6 +52,23 @@ The Output:
     ├── README.md                 # Project overview and setup instructions
     ├── ARCHITECTURE.md           # Architecture details and design decisions
     └── API.md                    # API documentation for integration
+```
+
+The bash commands to create above structure(folders and files) are:
+```bash
+mkdir -p src/main/scala/functorcoder/core
+mkdir -p src/main/scala/functorcoder/actions
+mkdir -p src/main/scala/functorcoder/types
+mkdir -p src/main/scala/functorcoder/editorUI
+mkdir -p src/main/scala/functorcoder/tests
+mkdir -p docs
+touch src/main/scala/functorcoder/core/AIEngine.scala
+touch src/main/scala/functorcoder/core/Utils.scala
+touch src/main/scala/functorcoder/actions/CodeCompletion.scala
+touch src/main/scala/functorcoder/actions/Refactor.scala
+touch src/main/scala/functorcoder/actions/Debug.scala
+
+touch src/main/scala/functorcoder/types/InputTypes.scala
 ```
 
 ### Setup
