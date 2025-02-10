@@ -12,9 +12,9 @@ lazy val root = project
     ScalaJSBundlerPlugin,
     ScalablyTypedConverterPlugin
   )
-  .configs(IntegrationTest)
-  .settings(Defaults.itSettings: _*)
-  .settings(inConfig(IntegrationTest)(ScalaJSPlugin.testConfigSettings): _*)
+  // .configs(IntegrationTest)
+  // .settings(Defaults.itSettings: _*)
+  // .settings(inConfig(IntegrationTest)(ScalaJSPlugin.testConfigSettings): _*)
   .settings(
     moduleName := "vscextension",
     organization := "com.doofin",
@@ -29,6 +29,8 @@ lazy val root = project
     Compile / fullOptJS / artifactPath := baseDirectory.value / "out" / "extension.js",
     libraryDependencies ++= Seq(
       // "com.lihaoyi" %%% "utest" % "0.8.2" % "test",
+      // ("org.latestbit", "circe-tagged-adt-codec", "0.11.0")
+      "org.latestbit" %%% "circe-tagged-adt-codec" % "0.11.0",
       "org.scalameta" %%% "munit" % "0.7.29" % Test
     ),
     Compile / npmDependencies ++=

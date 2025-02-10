@@ -35,6 +35,8 @@ project file structure:
 │   ├── /core
 │   │   ├── AIEngine.scala         # Core engine with main orchestration logic
 │   │   └── Utils.scala            # Helper utilities
+│   ├── /llm
+│   │   ├── LLM.scala              # Large Language Model (LLM) integration
 │   ├── /actions
 │   │   ├── CodeCompletion.scala   # Code completion module
 │   │   ├── Refactor.scala         # Refactor code module
@@ -57,13 +59,16 @@ project file structure:
 The bash commands to create above structure(folders and files) are:
 ```bash
 mkdir -p src/main/scala/functorcoder/core
+mkdir -p src/main/scala/functorcoder/llm
 mkdir -p src/main/scala/functorcoder/actions
 mkdir -p src/main/scala/functorcoder/types
 mkdir -p src/main/scala/functorcoder/editorUI
 mkdir -p src/main/scala/functorcoder/tests
 mkdir -p docs
+
 touch src/main/scala/functorcoder/core/AIEngine.scala
 touch src/main/scala/functorcoder/core/Utils.scala
+touch src/main/scala/functorcoder/llm/LLM.scala
 touch src/main/scala/functorcoder/actions/CodeCompletion.scala
 touch src/main/scala/functorcoder/actions/Refactor.scala
 touch src/main/scala/functorcoder/actions/Debug.scala

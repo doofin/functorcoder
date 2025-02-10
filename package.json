@@ -22,6 +22,20 @@
         "@types/vscode": "^1.73.0"
     },
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "functorcoder",
+            "properties": {
+                "openaiApiKey": {
+                    "type": "string",
+                    "default": ""
+                },
+                "openaiUrl": {
+                    "type": "string",
+                    "default": ""
+                }
+            }
+        },
         "commands": [
             {
                 "command": "extension.helloWorld",

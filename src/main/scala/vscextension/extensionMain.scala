@@ -6,6 +6,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 import typings.vscode.mod as vscode
 
 import facade.vscodeUtils.*
+import functorcoder.editorUI.editorConfig
 
 object extensionMain {
 
@@ -16,7 +17,8 @@ object extensionMain {
     showMessageAndLog("congrats, your scala.js vscode extension is loaded")
 
     val projectRoot = vscode.workspace.rootPath.getOrElse("")
-
+    val cfg = editorConfig.readConfig()
+    showMessageAndLog(s"config loaded: ${cfg.toString()}")
     // register all commands
     commands.registerAllCommands(context)
 
@@ -32,22 +34,20 @@ object extensionMain {
     // code actions like quick fixes
     CodeActions.registerCodeActions(context)
 
-    // network requests
-    val url = "https://github.com/"
-    io.network.httpGet(url)
-    io.network.httpGetTyped(url)
-
+    // functorcoder.llm.llmAIMain.test
     // file operations
-    io.fileIO.createFile(projectRoot)
+    // io.fileIO.createFile(projectRoot)
     // load configuration
-    val cfg = io.config.loadConfig(projectRoot + "/.vscode/settings.json")
-    showMessageAndLog(s"config loaded: $cfg")
+    // val cfg = io.config.loadConfig(projectRoot + "/.vscode/settings.json")
+    // showMessageAndLog(s"config loaded: $cfg")
 
     // language server client
     // lsp.startLsp()
 
     // webview
     // webview.showWebviewPanel()
+
+    // editor config
 
   }
 
