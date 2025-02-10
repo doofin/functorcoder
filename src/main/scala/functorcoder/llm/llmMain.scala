@@ -1,14 +1,11 @@
 package functorcoder.llm
 
 import openaiReq.*
-import vscextension.io.network.*
 import typings.nodeFetch.mod as nodeFetch
 
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
-import scala.util.{Failure, Success}
 
-import vscextension.facade.NodeFetch.*
 import vscextension.facade.vscodeUtils.*
 
 import scala.scalajs.js.Thenable.Implicits.*

@@ -16,7 +16,7 @@ object extensionMain {
   def activate(context: vscode.ExtensionContext): Unit = {
     showMessageAndLog("congrats, your scala.js vscode extension is loaded")
 
-    val projectRoot = vscode.workspace.rootPath.getOrElse("")
+    vscode.workspace.rootPath.getOrElse("")
     val cfg = editorConfig.readConfig()
     showMessageAndLog(s"config loaded: ${cfg.toString()}")
     // register all commands

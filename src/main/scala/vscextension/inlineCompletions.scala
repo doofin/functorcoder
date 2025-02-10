@@ -6,7 +6,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.*
 
-import facade.vscodeUtils.*
 import scala.scalajs.js.Promise
 import functorcoder.editorUI.editorConfig
 

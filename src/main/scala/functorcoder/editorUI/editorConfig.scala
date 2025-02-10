@@ -5,7 +5,7 @@ import typings.vscode.mod as vscode
 object editorConfig {
   case class Config(openaiApiKey: String, openaiUrl: String)
 
-  /** read the configuration from the settings.json file
+  /** read the configuration from the vscode settings.json
     *
     * @return
     *   the configuration object
