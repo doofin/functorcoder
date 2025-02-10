@@ -16,7 +16,7 @@ object editorConfig {
       config.getStringOrEmpty("openaiApiKey")
 
     val openaiUrl =
-      config.getStringOrEmpty("openaiUrl", "https://api.openai.com/v1/chat/completions")
+      config.getStringOrEmpty(key = "openaiUrl", default = "https://api.openai.com/v1/chat/completions")
 
     Config(openaiApiKey, openaiUrl)
   }
@@ -32,8 +32,8 @@ object editorConfig {
       * @return
       *   the string or an empty string
       */
-    def getStringOrEmpty(str: String, default: String = "") = {
-      config.get[String](str).toOption.getOrElse(default)
+    def getStringOrEmpty(key: String, default: String = "") = {
+      config.get[String](key).toOption.getOrElse(default)
     }
   }
 }

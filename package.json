@@ -1,9 +1,9 @@
 {
-    "name": "vscode-scalajs-hello",
-    "displayName": "vscode-scalajs-hello",
-    "description": "",
+    "name": "functorcoder",
+    "displayName": "functorcoder",
+    "description": "an ai coding assistant",
     "version": "0.0.1",
-    "publisher": "test",
+    "publisher": "functorcoder.com",
     "categories": [
         "Other"
     ],

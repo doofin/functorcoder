@@ -27,14 +27,15 @@ The Output:
 
 ## Project Structure
 package name: com.functorcoder
+It is the core module of the AI coding assistant, including below features:
+- Large Language Model (LLM) integration
+- sending propmt to LLM and getting the response
+
 
 project file structure:
 ```bash
 /functorcoder
 ├── /src/main/scala/functorcoder
-│   ├── /core
-│   │   ├── AIEngine.scala         # Core engine with main orchestration logic
-│   │   └── Utils.scala            # Helper utilities
 │   ├── /llm
 │   │   ├── LLM.scala              # Large Language Model (LLM) integration
 │   ├── /actions
@@ -45,33 +46,30 @@ project file structure:
 │   │   ├── InputTypes.scala     # Types for code, context, and user actions
 │   │   └── OutputTypes.scala      # Types for output (formatted code, suggestions)
 │   ├── /editorUI
-│   │   ├── EditorIntegration.scala# Integration with the editor (e.g., VSCode)
+│   │   ├── EditorIntegration.scala # Integration with the editor (e.g., VSCode)
 │   └── /tests
 │       ├── CoreTests.scala         # Unit tests for core modules
-│       ├── ActionTests.scala       # Unit tests for actions like code completion
-│       └── EditorTests.scala      # Tests for editor integration
 └── /docs
     ├── README.md                 # Project overview and setup instructions
     ├── ARCHITECTURE.md           # Architecture details and design decisions
     └── API.md                    # API documentation for integration
 ```
 
+The vscode extension package will be in the `vscextension` folder, which is in charge of integrating the AI part with the VSCode editor. It's adopted from the [vscode-scalajs-hello](https://github.com/doofin/vscode-scalajs-hello) project.
+
+```bash
+/vscextension
+├── /src/main/scala/vscextension
+│   ├── extensionMain.scala       # Main entry point for the extension
+│   ├── commands.scala            # Command definitions
+│   ├── codeActions.scala         # Code action definitions
+...
+```
+
+
 The bash commands to create above structure(folders and files) are:
 ```bash
-mkdir -p src/main/scala/functorcoder/core
-mkdir -p src/main/scala/functorcoder/llm
-mkdir -p src/main/scala/functorcoder/actions
 mkdir -p src/main/scala/functorcoder/types
-mkdir -p src/main/scala/functorcoder/editorUI
-mkdir -p src/main/scala/functorcoder/tests
-mkdir -p docs
-
-touch src/main/scala/functorcoder/core/AIEngine.scala
-touch src/main/scala/functorcoder/core/Utils.scala
-touch src/main/scala/functorcoder/llm/LLM.scala
-touch src/main/scala/functorcoder/actions/CodeCompletion.scala
-touch src/main/scala/functorcoder/actions/Refactor.scala
-touch src/main/scala/functorcoder/actions/Debug.scala
 
 touch src/main/scala/functorcoder/types/InputTypes.scala
 ```
