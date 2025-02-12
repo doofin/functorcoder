@@ -2,6 +2,10 @@
     "name": "functorcoder",
     "displayName": "functorcoder",
     "description": "an ai coding assistant",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/doofin/functorcoder/"
+    },
     "version": "0.0.1",
     "publisher": "functorcoder.com",
     "categories": [
@@ -10,7 +14,7 @@
     "activationEvents": [
         "*"
     ],
-    "main": "./out/extension",
+    "main": "./extension",
     "engines": {
         "vscode": "^1.84.0"
     },

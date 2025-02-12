@@ -31,8 +31,31 @@ jobs:
         uses: actions/setup-node@v4
 
       # install dependencies and build package
-      - name: compile Scala and build js to out/
-        run: sbt buildDebug
+      - name: compile Scala and build js to out/ folder
+        run: 
+          sbt buildDebug
 
-      - name: package extension
-        run: cd out/ && npx vsce package
+      - name: package extension inside out/ folder
+        run: 
+          cd out/
+          ls -la
+          npx vsce package
+
+      - name: Get upload url
+        id: get_upload_url
+        run: |
+          URL=$(curl --silent "https://api.github.com/repos/doofin/functorcoder/releases/latest" | jq -r '.upload_url')
+          echo ::set-output name=UPLOAD_URL::$URL
+
+      - name: Upload VSIX package to github release
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_upload_url.outputs.UPLOAD_URL }}
+          asset_path:
+            ./out/functorcoder-0.0.1.vsix
+          asset_name: |
+            functorcoder-0.0.1.vsix
+          asset_content_type: application/octet-stream
+
