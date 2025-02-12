@@ -7,7 +7,6 @@ import scala.scalajs.js
 import scala.scalajs.js.JSConverters.*
 
 import scala.scalajs.js.Promise
-import functorcoder.editorUI.editorConfig
 
 /** demonstrates how to provide inline completions in the editor. like the github copilot
   * https://github.com/microsoft/vscode-extension-samples/tree/main/inline-completions
@@ -15,8 +14,13 @@ import functorcoder.editorUI.editorConfig
   */
 object inlineCompletions {
 
+  /** Creates an inline completion item provider for Visual Studio Code.
+    *
+    * @return
+    *   An instance of `vscode.InlineCompletionItemProvider`.
+    */
   def createCompletionProvider(): vscode.InlineCompletionItemProvider = {
-    val cfg = editorConfig.readConfig()
+    val cfg = settings.readConfig()
     val llm = functorcoder.llm.llmMain.llmAgent(cfg)
 
     new vscode.InlineCompletionItemProvider {

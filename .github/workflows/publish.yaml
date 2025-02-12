@@ -2,9 +2,10 @@ name: Release
 
 # trigger on git push for release branch
 on:
+  workflow_dispatch: # allow manual trigger
   push: 
-    # branches:
-    #   - release    
+    branches:
+      - release    
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

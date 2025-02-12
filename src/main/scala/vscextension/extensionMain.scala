@@ -6,7 +6,6 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 import typings.vscode.mod as vscode
 
 import facade.vscodeUtils.*
-import functorcoder.editorUI.editorConfig
 
 object extensionMain {
 
@@ -17,7 +16,7 @@ object extensionMain {
     showMessageAndLog("congrats, your scala.js vscode extension is loaded")
 
     vscode.workspace.rootPath.getOrElse("")
-    val cfg = editorConfig.readConfig()
+    val cfg = settings.readConfig()
     showMessageAndLog(s"config loaded: ${cfg.toString()}")
     // register all commands
     commands.registerAllCommands(context)

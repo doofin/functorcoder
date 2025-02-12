@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: CI
 
 on:
   push:
@@ -8,7 +8,7 @@ env:
 
 jobs:
   run:
-    name: Build and Run
+    name: Compile
     strategy:
       matrix:
         java-version: [17]
@@ -25,6 +25,9 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
           cache: sbt
+
+          # cache sbt dependencies          
+      - uses: coursier/cache-action@v6 
 
       - uses: sbt/setup-sbt@v1
 
