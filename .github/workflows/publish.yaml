@@ -37,8 +37,8 @@ jobs:
 
       - name: package extension inside out/ folder
         run: 
-          cd out/
-          ls -la
+          cd out/ &&
+          ls -la &&
           npx vsce package
 
       - name: Get upload url
