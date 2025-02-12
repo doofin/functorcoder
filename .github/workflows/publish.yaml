@@ -1,0 +1,41 @@
+name: Build and publish vsix package
+
+on:
+  push:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  run:
+    name: Build and Run
+    strategy:
+      matrix:
+        java-version: [17]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # install java, sbt and node
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java-version }}
+          cache: sbt
+      - uses: sbt/setup-sbt@v1
+
+      - name: setup node
+        uses: actions/setup-node@v4
+
+      # install dependencies and build package
+      - name: compile Scala.js
+        run: sbt fastOptJS
+
+      - name: install dependencies
+        run: cp package.json out/ && npm
+
+      - name: package extension
+        run: cd out/ && npx vsce package
