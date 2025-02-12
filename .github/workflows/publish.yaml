@@ -1,4 +1,4 @@
-name: Build and publish vsix package
+name: Release
 
 on:
   push:
@@ -8,7 +8,7 @@ env:
 
 jobs:
   run:
-    name: Build and Run
+    name: Build and publish vsix package
     strategy:
       matrix:
         java-version: [17]
@@ -31,11 +31,8 @@ jobs:
         uses: actions/setup-node@v4
 
       # install dependencies and build package
-      - name: compile Scala.js
-        run: sbt fastOptJS
-
-      - name: install dependencies
-        run: cp package.json out/ && npm
+      - name: compile Scala and build js to out/
+        run: sbt buildDebug
 
       - name: package extension
         run: cd out/ && npx vsce package

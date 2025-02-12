@@ -4,6 +4,7 @@ import org.scalajs.linker.interface.{ModuleKind, ModuleInitializer, ModuleSplitS
 val outdir = "out" // output directory for the extension
 // open command in sbt
 lazy val open = taskKey[Unit]("open vscode")
+lazy val buildDebug = taskKey[Unit]("build debug")
 
 lazy val root = project
   .in(file("."))
@@ -48,14 +49,17 @@ lazy val root = project
          else Seq.empty), */
     stIgnore ++= List( // don't generate types with scalablytyped
     ),
-    open := openVSCodeTask().dependsOn(Compile / fastOptJS).value
+    open := openVSCodeTask().dependsOn(Compile / fastOptJS).value,
+    buildDebug := openVSCodeTask(openVscode = false).dependsOn(Compile / fastOptJS).value
     // open := openVSCodeTask.dependsOn(Compile / fastOptJS / webpack).value,
     // testFrameworks += new TestFramework("utest.runner.Framework")
     // publishMarketplace := publishMarketplaceTask.dependsOn(fullOptJS in Compile).value
   )
+
 addCommandAlias("compile", ";fastOptJS")
 addCommandAlias("dev", "~fastOptJS")
 addCommandAlias("fix", ";scalafixEnable;scalafixAll;")
+// open, buildDebug are other commands added
 
 def openVSCodeTask(openVscode: Boolean = true): Def.Initialize[Task[Unit]] =
   Def
