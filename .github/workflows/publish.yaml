@@ -1,7 +1,10 @@
 name: Release
 
+# trigger on git push for release branch
 on:
-  push:
+  push: 
+    branches:
+      - release    
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -14,12 +17,15 @@ jobs:
         java-version: [17]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current branch (full)
+      - name: Checkout current branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0    
+      # cache sbt dependencies          
+      - uses: coursier/cache-action@v6 
+
       # install java, sbt and node
-      - name: Setup Java
+      - name: Setup Java and sbt
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -36,9 +42,9 @@ jobs:
           sbt buildDebug
 
       - name: package extension inside out/ folder
-        run: 
-          cd out/ &&
-          ls -la &&
+        run: |
+          cd out/ 
+          ls -la 
           npx vsce package
 
       - name: Get upload url
@@ -48,14 +54,7 @@ jobs:
           echo ::set-output name=UPLOAD_URL::$URL
 
       - name: Upload VSIX package to github release
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
+        # if: startsWith(github.ref, 'refs/tags/')
         with:
-          upload_url: ${{ steps.get_upload_url.outputs.UPLOAD_URL }}
-          asset_path:
-            ./out/functorcoder-0.0.1.vsix
-          asset_name: |
-            functorcoder-0.0.1.vsix
-          asset_content_type: application/octet-stream
-
+          files: out/functorcoder-0.0.1.vsix
