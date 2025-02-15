@@ -17,6 +17,8 @@ object extensionMain {
 
     vscode.workspace.rootPath.getOrElse("")
     val cfg = settings.readConfig()
+    val llm = functorcoder.llm.llmMain.llmAgent(cfg)
+
     showMessageAndLog(s"config loaded: ${cfg.toString()}")
     // register all commands
     commands.registerAllCommands(context)
@@ -29,13 +31,13 @@ object extensionMain {
     documentProps.showProps
 
     // register inline completions like github copilot
-    inlineCompletions.registerInlineCompletions()
+    inlineCompletions.registerInlineCompletions(llm)
 
     // quick pick palette, like command palette
     // quickPick.showQuickPick()
 
     // code actions like quick fixes
-    CodeActions.registerCodeActions(context)
+    CodeActions.registerCodeActions(context, llm)
 
     // functorcoder.llm.llmAIMain.test
     // file operations

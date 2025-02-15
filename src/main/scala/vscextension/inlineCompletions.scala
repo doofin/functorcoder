@@ -7,6 +7,9 @@ import scala.scalajs.js
 import scala.scalajs.js.JSConverters.*
 
 import scala.scalajs.js.Promise
+import functorcoder.llm.llmPrompt
+import functorcoder.llm.llmMain.llmAgent
+import vscextension.facade.vscodeUtils.showMessageAndLog
 
 /** demonstrates how to provide inline completions in the editor. like the github copilot
   * https://github.com/microsoft/vscode-extension-samples/tree/main/inline-completions
@@ -14,16 +17,8 @@ import scala.scalajs.js.Promise
   */
 object inlineCompletions {
 
-  /** Creates an inline completion item provider for Visual Studio Code.
-    *
-    * @return
-    *   An instance of `vscode.InlineCompletionItemProvider`.
-    */
-  def createCompletionProvider(): vscode.InlineCompletionItemProvider = {
-    val cfg = settings.readConfig()
-    val llm = functorcoder.llm.llmMain.llmAgent(cfg)
-
-    new vscode.InlineCompletionItemProvider {
+  def registerInlineCompletions(llm: llmAgent) = {
+    val mCompletionProvider = new vscode.InlineCompletionItemProvider {
       override def provideInlineCompletionItems(
           document: vscode.TextDocument, // the current document
           position: vscode.Position, // the position of the cursor
@@ -33,21 +28,23 @@ object inlineCompletions {
 
         val codeBefore = document.getText(new vscode.Range(new vscode.Position(0, 0), position))
         val codeAfter = document.getText(new vscode.Range(position, document.positionAt(document.getText().length)))
-        val r = llm.getCodeCompletion { hole =>
-          val prompt = s"$codeBefore$hole$codeAfter"
-          // showMessageAndLog(s"prompt: $prompt")
-          prompt
-        }
+
+        val prompt = llmPrompt
+          .Completion(codeWithHole = s"$codeBefore${llmPrompt.promptText.hole}$codeAfter")
+
+        // assistantMessage: String = promptText.prompt1
+        val promptResponseF = llm.sendPrompt(prompt)
 
         val providerResultF: Promise[scala.scalajs.js.Array[vscode.InlineCompletionItem]] =
-          r.map(completionText =>
+          promptResponseF.map { completionText =>
+            showMessageAndLog(s"completionText: $completionText")
             js.Array(
               new vscode.InlineCompletionItem(
                 insertText = completionText, // text to insert
                 range = new vscode.Range(position, position)
               )
             )
-          ).toJSPromise
+          }.toJSPromise
 
         providerResultF.asInstanceOf[typings.vscode.mod.ProviderResult[
           scala.scalajs.js.Array[typings.vscode.mod.InlineCompletionItem] | typings.vscode.mod.InlineCompletionList
@@ -55,9 +52,7 @@ object inlineCompletions {
       }
 
     }
-  }
-
-  def registerInlineCompletions() = {
-    vscode.languages.registerInlineCompletionItemProvider(selector = "*", provider = createCompletionProvider())
+    vscode.languages
+      .registerInlineCompletionItemProvider(selector = "*", provider = mCompletionProvider)
   }
 }

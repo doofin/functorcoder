@@ -12,6 +12,7 @@ import scala.scalajs.js.Thenable.Implicits.*
 import scala.concurrent.Future
 
 import functorcoder.editorUI.editorConfig
+import cats.syntax.show
 
 /** large language model (LLM) AI main
   *
@@ -27,16 +28,21 @@ object llmMain {
     *   completion prompt object
     * @return
     */
-  def getCompletionPrompt(completionPrompt: llmPrompt.Completion) = {
-    openaiReq
+  def prompt2str(inputPrompt: llmPrompt.Prompt) = {
+    showMessageAndLog(s"prompt: ${inputPrompt}")
+    showMessageAndLog(s"prompt assistant: ${inputPrompt.getAssistantMessage}")
+
+    val openAiRequest = openaiReq
       .OpenAiRequest(
         List(
-          openaiReq.Message(roles.user, completionPrompt.codeWithHole),
-          openaiReq.Message(roles.system, completionPrompt.assistantMessage)
+          openaiReq.Message(roles.user, inputPrompt.generatePrompt),
+          openaiReq.Message(roles.system, inputPrompt.getAssistantMessage)
         ),
         openaiReq.models.gpt4o
       )
-      .toJson
+
+    showMessageAndLog(s"openai request: ${openAiRequest}")
+    openAiRequest.toJson
   }
 
   case class llmAgent(editorCfg: editorConfig.Config) {
@@ -51,10 +57,10 @@ object llmMain {
       *
       * so we will call this function with the hole "{{FILL_HERE}}" you insert it in the code
       */
-    def getCodeCompletion(holeToCode: String => String) = {
-      val requestStr = getCompletionPrompt(
-        llmPrompt
-          .Completion(holeToCode("{{FILL_HERE}}"))
+    def sendPrompt(input: llmPrompt.Prompt) = {
+
+      val requestStr = prompt2str(
+        input
       )
 
       val requestOptions = getRequestOptions(requestStr)
@@ -76,6 +82,15 @@ object llmMain {
       }
     }
 
+    /** get the response text from ai api, only the content of the first choice
+      *
+      * it parses the response json and returns the first choice
+      *
+      * @param responseFuture
+      *   the response future
+      * @return
+      *   the response text
+      */
     private def getResponseText(responseFuture: Future[nodeFetch.Response]) = {
       for {
         res <- responseFuture

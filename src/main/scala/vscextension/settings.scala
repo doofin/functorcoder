@@ -32,7 +32,12 @@ object settings {
       *   the string or an empty string
       */
     def getStringOrEmpty(key: String, default: String = "") = {
-      config.get[String](key).toOption.getOrElse(default)
+      // if the key is found but the value is empty, return the default
+
+      config.get[String](key).toOption match {
+        case None        => default
+        case Some(value) => if (value.isEmpty) default else value
+      }
     }
   }
 }

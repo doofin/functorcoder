@@ -5,8 +5,13 @@ package functorcoder.llm
   * for completion, code generation, etc.
   */
 object llmPrompt {
+  // trait will have undefined value
+  sealed abstract class Prompt(val assistantMsg: String) {
+    def generatePrompt: String
+    def getAssistantMessage: String = assistantMsg
+  }
 
-  /** a configuration for code completion
+  /** code completion prompt
     *
     * https://github.com/continuedev/continue/blob/main/core/autocomplete/templating/AutocompleteTemplate.ts
     *
@@ -26,8 +31,8 @@ object llmPrompt {
   case class Completion(
       codeWithHole: String, // code with a hole to fill like {{FILL_HERE}}
       // taskRequirement: String, // like "Fill the {{FILL_HERE}} hole."
-      assistantMessage: String = prompts.prompt1
-  ) {
+      assistantMessage: String = promptText.prompt1
+  ) extends Prompt(assistantMessage) {
     def generatePrompt = {
       // shall return a string wrapped with <COMPLETION></COMPLETION>
       // s"""<QUERY>
@@ -40,13 +45,38 @@ object llmPrompt {
        */
       codeWithHole
     }
+
+  }
+
+  /** modify code snippet
+    *
+    * @param code
+    *   code snippet
+    * @param taskRequirement
+    *   like "Fill the {{FILL_HERE}} hole."
+    * @param assistantMessage
+    *   like "always give scala code examples."
+    */
+  case class Modification(
+      code: String,
+      taskRequirement: String,
+      assistantMessage: String = promptText.promptTask
+  ) extends Prompt(assistantMessage) {
+    def generatePrompt = {
+      s"""<QUERY>
+    |${code}
+    |</QUERY>
+    |TASK: ${taskRequirement}
+    |""".stripMargin
+    }
   }
 
   /** prompts engineering
     *
     * more like art than science. just try different prompts and see what works best
     */
-  object prompts {
+  object promptText {
+    val hole = "{{FILL_HERE}}"
     val prompt1 =
       "You are a code or text autocompletion assistant. " +
         "In the provided input, missing code or text are marked as '{{FILL_HERE}}'. " +
@@ -58,11 +88,15 @@ object llmPrompt {
         "{{FILL_HERE}}  in the string, " +
         "your task is to replace this hole with your reply." +
         "you only return the string for the hole with indentation, without any quotes"
+
+    val promptTask =
+      "You are given a text or code snippet wrapped in a <QUERY> tag and a TASK requirement. " +
+        "You are going to return the new snippet according to the TASK requirement. "
   }
 }
 
 /* example:
-    <QUERY>
+<QUERY>
 function sum_evens(lim) {
   var sum = 0;
   for (var i = 0; i < lim; ++i) {

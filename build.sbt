@@ -22,7 +22,8 @@ lazy val root = project
     scalaVersion := "3.3.4",
     // warn unused imports and vars
     scalacOptions ++= Seq(
-      "-Wunused:all"
+      "-Wunused:all",
+      "-no-indent"
     ),
     // check if it is running in test
     // testOptions += Tests.Setup(_ => sys.props("testing") = "true"),
@@ -80,8 +81,10 @@ def openVSCodeTask(openVscode: Boolean = true): Def.Initialize[Task[Unit]] =
       }
       // launch vscode
       if (openVscode) {
+        val extenPath = s"${path}/${outdir}"
         println("\u001b[33m" + "[opening] vscode" + "\u001b[0m")
-        s"code --extensionDevelopmentPath=$path" ! log
+        println("\u001b[33m" + s"with extensionDevelopmentPath=${extenPath}" + "\u001b[0m")
+        s"code --extensionDevelopmentPath=$extenPath" ! log
       }
       ()
     }
