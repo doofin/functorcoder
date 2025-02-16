@@ -36,36 +36,13 @@ object CodeActions {
             llm.sendPrompt(
               llmPrompt.Modification(
                 code = selectedCode, //
-                taskRequirement = "add documentation"
+                taskRequirement = llmPrompt.generateDocs(documentProps.getLanguage())
               )
             )
 
-          val editor = new vscode.WorkspaceEdit() {
-            // linking issue from compiler
-            // llmResponse.wait()
-            // val response = Await.result(llmResponse, Duration.Inf)
-            // // llmResponse.toJSPromise.wait()
-            // showMessageAndLog("llm response: " + response)
-            // insert(
-            //   uri = document.uri,
-            //   position = range.start,
-            //   newText = response
-            // )
-          }
-
-          llmResponse.foreach { response =>
-            showMessageAndLog("llm response: " + response)
-            // does not work since it is not in the same thread?
-            editor.insert(
-              uri = document.uri,
-              position = range.start,
-              newText = response
-            )
-          }
-
           val fix1 =
             new vscode.CodeAction(
-              title = "generate documentation",
+              title = "add documentation for selected code",
               kind = vscode.CodeActionKind.QuickFix
             ) {
               isPreferred = true // show it first

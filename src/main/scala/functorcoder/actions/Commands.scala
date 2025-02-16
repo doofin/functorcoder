@@ -10,6 +10,7 @@ import vscextension.quickPick
 import vscextension.facade.vscodeUtils.showMessageAndLog
 import scala.concurrent.Future
 import functorcoder.types.editorCtx.codeActionParam
+import typings.std.stdStrings.ins
 
 /** Commands are actions that a user can invoke in the vscode extension with command palette (ctrl+shift+p).
   */
@@ -19,6 +20,7 @@ object Commands {
   val commandMenu = "functorcoder.menu"
   val commandAddDocumentation = "functorcoder.addDocumentation"
 
+  // list of all commands to be registered
   val commandList: Seq[(String, CommandT)] =
     Seq(
       (commandMenu, quickPick.showQuickPick),
@@ -30,12 +32,33 @@ object Commands {
     "create files" -> { () => println("create files") }
   )
 
+  // individual command handlers
   def addDocumentation(arg: Any) = {
     val param =
       arg.asInstanceOf[codeActionParam[Future[String]]]
     val llmResponse = param.param
     llmResponse.foreach { response =>
       showMessageAndLog("add doc: " + s"${param.documentUri}, ${param.range}, ${response}")
+      // apply the changes to the document
+      vscode.window.activeTextEditor.toOption match {
+        case None =>
+          showMessageAndLog("no active editor!")
+        case Some(ed) =>
+          ed.insertSnippet(
+            new vscode.SnippetString("\n" + response), //
+            param.range.start
+          )
+      }
+
+      // vscode.workspace.applyEdit(
+      //   new vscode.WorkspaceEdit {
+      //     insert(
+      //       vscode.Uri.parse(param.documentUri),
+      //       param.range.start,
+      //       response
+      //     )
+      //   }
+      // )
     }
 
     // showMessageAndLog("add documentation: " + s"${dyn.uri}, ${dyn.range}, ${dyn.llmResponse}")

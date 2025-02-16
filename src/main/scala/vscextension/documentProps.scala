@@ -12,15 +12,19 @@ object documentProps {
     * like the language of the document, the project root, etc.
     */
   def showProps = {
-    vscode.window.activeTextEditor.toOption match {
-      case None =>
-        showMessageAndLog("no active editor")
-      case Some(editor) =>
-        showMessageAndLog("current language: " + editor.document.languageId)
-    }
+    showMessageAndLog("document language: " + getLanguage())
 
     val projectRoot = vscode.workspace.rootPath.getOrElse("")
     showMessageAndLog("project root: " + projectRoot)
 
+  }
+
+  def getLanguage() = {
+    vscode.window.activeTextEditor.toOption match {
+      case None =>
+        ""
+      case Some(editor) =>
+        editor.document.languageId
+    }
   }
 }

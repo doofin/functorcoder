@@ -93,6 +93,13 @@ object llmPrompt {
       "You are given a text or code snippet wrapped in a <QUERY> tag and a TASK requirement. " +
         "You are going to return the new snippet according to the TASK requirement. "
   }
+
+  def generateDocs(language: String) = {
+    "generate short documentation for the input code, " +
+      "and return only the documentation for language: " + language +
+      "the documentation shall be the format according to the language, " +
+      "but don't wrap it with backticks or any other tags."
+  }
 }
 
 /* example:
