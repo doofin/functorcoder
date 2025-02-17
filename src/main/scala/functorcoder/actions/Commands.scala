@@ -1,4 +1,5 @@
 package functorcoder.actions
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import typings.vscode.mod as vscode
@@ -8,23 +9,25 @@ import scala.scalajs.js
 
 import vscextension.quickPick
 import vscextension.facade.vscodeUtils.showMessageAndLog
+
 import scala.concurrent.Future
 import functorcoder.types.editorCtx.codeActionParam
-import typings.std.stdStrings.ins
 
 /** Commands are actions that a user can invoke in the vscode extension with command palette (ctrl+shift+p).
   */
 object Commands {
   type CommandT = Any => Unit
   // all the commands here
-  val commandMenu = "functorcoder.menu"
-  val commandAddDocumentation = "functorcoder.addDocumentation"
+  val commandMenu =
+    ("functorcoder.menu", quickPick.showQuickPick)
+  val commandAddDocumentation =
+    ("functorcoder.addDocumentation", addDocumentation)
 
   // list of all commands to be registered
   val commandList: Seq[(String, CommandT)] =
     Seq(
-      (commandMenu, quickPick.showQuickPick),
-      (commandAddDocumentation, addDocumentation)
+      commandMenu,
+      commandAddDocumentation
     )
 
     // the main menu items

@@ -11,7 +11,7 @@ import facade.vscodeUtils.*
   *
   * This object registers all the commands in the extension.
   */
-object commands {
+object vscCommands {
 
   /** Register all the commands in the extension.
     *

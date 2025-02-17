@@ -11,6 +11,7 @@ import cats.syntax.show
 import scala.concurrent.duration.Duration
 import scala.concurrent.Await
 import scala.concurrent.Future
+import functorcoder.types.editorCtx.*
 
 /** Code actions are commands provided at the cursor in the editor, so users can
   *
@@ -46,33 +47,25 @@ object CodeActions {
               kind = vscode.CodeActionKind.QuickFix
             ) {
               isPreferred = true // show it first
-              // should invoke a command to perform the action
-              import functorcoder.types.editorCtx.*
               val args: codeActionParam[Future[String]] = new codeActionParam(
                 document.uri.toString(),
                 range,
                 llmResponse
               )
-
+              // invoke command
               command = vscode
                 .Command(
-                  command = functorcoder.actions.Commands.commandAddDocumentation, //
+                  command = functorcoder.actions.Commands.commandAddDocumentation._1, //
                   title = "add documentation" //
                 )
                 .setArguments(js.Array(args))
 
-              // edit = editor
-              // optional command to run when the code action is selected
-              // command = ..
             }
             // can return array or promise of array
 
           js.Array(fix1)
-
-          // the code action for learn more
         }
 
-        // override def provideCodeActions
         def provideCodeActions(
             document: vscode.TextDocument,
             range: vscode.Selection,

@@ -21,7 +21,7 @@ object extensionMain {
 
     showMessageAndLog(s"config loaded: ${cfg.toString()}")
     // register all commands
-    commands.registerAllCommands(context)
+    vscCommands.registerAllCommands(context)
 
     // show the status bar
     val statusBarItem =

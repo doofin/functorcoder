@@ -1,11 +1,11 @@
 package functorcoder.llm
 
-/** large language model (LLM) AI prompt
+/** prompts for the llm
   *
   * for completion, code generation, etc.
   */
 object llmPrompt {
-  // trait will have undefined value
+  // trait will have undefined value, so we use abstract class
   sealed abstract class Prompt(val assistantMsg: String) {
     def generatePrompt: String
     def getAssistantMessage: String = assistantMsg
@@ -34,15 +34,7 @@ object llmPrompt {
       assistantMessage: String = promptText.prompt1
   ) extends Prompt(assistantMessage) {
     def generatePrompt = {
-      // shall return a string wrapped with <COMPLETION></COMPLETION>
-      // s"""<QUERY>
-      //        |${codeWithHole}
-      //        |</QUERY>
-      //        |""".stripMargin
 
-      /*              |
-             |TASK: ${taskRequirement}
-       */
       codeWithHole
     }
 
@@ -71,6 +63,25 @@ object llmPrompt {
     }
   }
 
+  /** tags, placeholders and templates used in the prompt
+    *
+    * for code completion
+    */
+  case class QueryTags(
+      hole: String, //
+      queryStart: String,
+      queryEnd: String,
+      task: String
+  )
+
+  val tags1 =
+    QueryTags(
+      hole = "{{HOLE}}", //
+      queryStart = "{{QUERY_START}}",
+      queryEnd = "{{QUERY_END}}",
+      task = "{{TASK}}"
+    )
+
   /** prompts engineering
     *
     * more like art than science. just try different prompts and see what works best
@@ -79,18 +90,18 @@ object llmPrompt {
     val hole = "{{FILL_HERE}}"
     val prompt1 =
       "You are a code or text autocompletion assistant. " +
-        "In the provided input, missing code or text are marked as '{{FILL_HERE}}'. " +
+        s"In the provided input, missing code or text are marked as $hole. " +
         "Your task is to output only the snippet that replace the placeholder, " +
         "ensuring that indentation and formatting remain consistent with the context. Don't quote your output"
     val prompt2 =
       "You are a hole filler," +
         "You are given a string with a hole: " +
-        "{{FILL_HERE}}  in the string, " +
+        s"$hole  in the string, " +
         "your task is to replace this hole with your reply." +
         "you only return the string for the hole with indentation, without any quotes"
 
     val promptTask =
-      "You are given a text or code snippet wrapped in a <QUERY> tag and a TASK requirement. " +
+      "You are given a text or code snippet wrapped in <QUERY> tag and a TASK requirement. " +
         "You are going to return the new snippet according to the TASK requirement. "
   }
 
