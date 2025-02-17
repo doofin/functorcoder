@@ -2,7 +2,6 @@ package vscextension
 
 import typings.vscode.mod as vscode
 
-import scala.collection.immutable
 import scala.scalajs.js
 
 import facade.vscodeUtils.*

@@ -24,8 +24,7 @@ object extensionMain {
     vscCommands.registerAllCommands(context)
 
     // show the status bar
-    val statusBarItem =
-      statusBar.createStatusBarItem(context)
+    statusBar.createStatusBarItem(context)
     // statusBarItem.text = "functorcoder ok"
     // show the current language of the document
     documentProps.showProps

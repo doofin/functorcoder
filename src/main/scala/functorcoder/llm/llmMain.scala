@@ -12,7 +12,6 @@ import scala.scalajs.js.Thenable.Implicits.*
 import scala.concurrent.Future
 
 import functorcoder.editorUI.editorConfig
-import cats.syntax.show
 
 /** large language model (LLM) AI main
   *

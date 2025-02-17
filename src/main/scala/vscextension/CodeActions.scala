@@ -1,15 +1,10 @@
 package vscextension
 import typings.vscode.mod as vscode
 import scala.scalajs.js
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.scalajs.js.JSConverters.JSRichFutureNonThenable
 
 import facade.vscodeUtils.*
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.llm.llmPrompt
-import cats.syntax.show
-import scala.concurrent.duration.Duration
-import scala.concurrent.Await
 import scala.concurrent.Future
 import functorcoder.types.editorCtx.*
 
