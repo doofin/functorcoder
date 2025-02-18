@@ -17,7 +17,8 @@ object settings {
     val openaiUrl =
       config.getStringOrEmpty(key = "openaiUrl", default = "https://api.openai.com/v1/chat/completions")
 
-    Config(openaiApiKey, openaiUrl)
+    val maxTokens = config.get[Int]("maxTokens").getOrElse(1000)
+    Config(openaiApiKey, openaiUrl, maxTokens)
   }
 
   extension (config: vscode.WorkspaceConfiguration) {

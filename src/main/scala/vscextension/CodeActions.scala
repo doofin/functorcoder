@@ -1,11 +1,13 @@
 package vscextension
-import typings.vscode.mod as vscode
+
 import scala.scalajs.js
+import scala.concurrent.Future
+
+import typings.vscode.mod as vscode
 
 import facade.vscodeUtils.*
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.llm.llmPrompt
-import scala.concurrent.Future
 import functorcoder.types.editorCtx.*
 
 /** Code actions are commands provided at the cursor in the editor, so users can
@@ -69,11 +71,11 @@ object CodeActions {
         ): vscode.ProviderResult[js.Array[vscode.CodeAction]] = {
 
           // check who triggers the code action, since vscode may trigger it automatically
-          val res = context.triggerKind match {
+          context.triggerKind match {
             case vscode.CodeActionTriggerKind.Invoke =>
               // triggered by user
 
-              showMessageAndLog("selected code: " + document.getText(range))
+              // showMessageAndLog("selected code: " + document.getText(range))
               createCodeAction(document, range, context)
 
             case _ =>
@@ -81,11 +83,7 @@ object CodeActions {
               js.Array()
 
           }
-
-          res.asInstanceOf[vscode.ProviderResult[js.Array[vscode.CodeAction]]]
-
         }
-        // cast the object to the required type
       }.asInstanceOf[vscode.CodeActionProvider[vscode.CodeAction]]
 
     val registration: vscode.Disposable =
@@ -100,7 +98,6 @@ object CodeActions {
       )
 
     context.pushDisposable(registration)
-    showMessageAndLog("registered code actions")
   }
 
 }

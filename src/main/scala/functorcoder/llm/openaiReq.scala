@@ -108,12 +108,12 @@ object openaiReq {
     */
   case class OpenAiRequest(
       messages: Seq[Message],
-      model: String
-      // frequency_penalty: Option[Double] = None,
-      // logit_bias: Option[Map[String, Int]] = None,
-      // logprobs: Option[Boolean] = None,
-      // top_logprobs: Option[Int] = None,
-      // max_tokens: Option[Int] = None,
+      model: String,
+      frequency_penalty: Option[Double] = None,
+      logit_bias: Option[Map[String, Int]] = None,
+      logprobs: Option[Boolean] = None,
+      top_logprobs: Option[Int] = None,
+      max_tokens: Option[Int] = None
       // n: Option[Int] = None,
       // presence_penalty: Option[Double] = None,
       // response_format: Option[String] = None,

@@ -27,9 +27,9 @@ object llmMain {
     *   completion prompt object
     * @return
     */
-  def prompt2str(inputPrompt: llmPrompt.Prompt) = {
-    showMessageAndLog(s"prompt: ${inputPrompt}")
-    showMessageAndLog(s"prompt assistant: ${inputPrompt.getAssistantMessage}")
+  def prompt2str(editorCfg: editorConfig.Config, inputPrompt: llmPrompt.Prompt) = {
+    // showMessageAndLog(s"prompt: ${inputPrompt}")
+    // showMessageAndLog(s"prompt assistant: ${inputPrompt.getAssistantMessage}")
 
     val openAiRequest = openaiReq
       .OpenAiRequest(
@@ -37,10 +37,11 @@ object llmMain {
           openaiReq.Message(roles.user, inputPrompt.generatePrompt),
           openaiReq.Message(roles.system, inputPrompt.getAssistantMessage)
         ),
-        openaiReq.models.gpt4o
+        openaiReq.models.gpt4oMini,
+        max_tokens = Some(editorCfg.maxTokens)
       )
 
-    showMessageAndLog(s"openai request: ${openAiRequest}")
+    // showMessageAndLog(s"openai request: ${openAiRequest}")
     openAiRequest.toJson
   }
 
@@ -58,9 +59,7 @@ object llmMain {
       */
     def sendPrompt(input: llmPrompt.Prompt) = {
 
-      val requestStr = prompt2str(
-        input
-      )
+      val requestStr = prompt2str(editorCfg, input)
 
       val requestOptions = getRequestOptions(requestStr)
 
