@@ -37,10 +37,15 @@ lazy val root = project
     ),
     Compile / npmDependencies ++=
       Seq(
-        "@types/vscode" -> "1.96.0", //
+        // vscode dependencies
+        "@types/vscode" -> "1.96.0",
+        // "@vscode/dts" -> "0.4.1", // it's just a utility to download sources
+        "vscode-languageclient" -> "9.0.1", // working with manuallly created facade
+
+        // other dependencies
         "@types/node" -> "16.11.7", // ts 3.7
-        "@types/node-fetch" -> "2.5.12", // ts 3.7,compile error for scalablytyped
-        "vscode-languageclient" -> "9.0.1" // working with manuallly created facade
+        "@types/node-fetch" -> "2.5.12" // ts 3.7,compile error for scalablytyped
+
       ),
     /* ++ // check if it is running in test
         (if (sys.props.get("testing") != Some("true"))
