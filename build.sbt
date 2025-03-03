@@ -29,10 +29,18 @@ lazy val root = project
     // testOptions += Tests.Setup(_ => sys.props("testing") = "true"),
     Compile / fastOptJS / artifactPath := baseDirectory.value / "out" / "extension.js",
     Compile / fullOptJS / artifactPath := baseDirectory.value / "out" / "extension.js",
+    resolvers ++= Seq(
+      Resolver.jcenterRepo,
+      "jitpack" at "https://jitpack.io",
+      "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+    ),
     libraryDependencies ++= Seq(
       // "com.lihaoyi" %%% "utest" % "0.8.2" % "test",
       // ("org.latestbit", "circe-tagged-adt-codec", "0.11.0")
       "org.latestbit" %%% "circe-tagged-adt-codec" % "0.11.0",
+      "com.github.doofin.stdScala" %%% "stdscala" % "387b33df3a",
+
+      // test dependencies
       "org.scalameta" %%% "munit" % "0.7.29" % Test
     ),
     Compile / npmDependencies ++=

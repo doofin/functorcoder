@@ -5,6 +5,26 @@ package functorcoder.llm
   * for completion, code generation, etc.
   */
 object llmPrompt {
+
+  /** tags, placeholders and templates used in the prompt
+    *
+    * for code completion
+    */
+  case class QueryTags(
+      hole: String, //
+      queryStart: String,
+      queryEnd: String,
+      task: String
+  )
+
+  val tagsInUse =
+    QueryTags(
+      hole = "{{HOLE}}", //
+      queryStart = "{{QUERY_START}}",
+      queryEnd = "{{QUERY_END}}",
+      task = "{{TASK}}"
+    )
+
   // trait will have undefined value, so we use abstract class
   sealed abstract class Prompt(val assistantMsg: String) {
     def generatePrompt: String
@@ -52,7 +72,9 @@ object llmPrompt {
   case class Modification(
       code: String,
       taskRequirement: String,
-      assistantMessage: String = promptText.promptTask
+      assistantMessage: String =
+        "You are given a text or code snippet wrapped in <QUERY> tag and a TASK requirement. " +
+          "You are going to return the new snippet according to the TASK requirement. "
   ) extends Prompt(assistantMessage) {
     def generatePrompt = {
       s"""<QUERY>
@@ -62,25 +84,25 @@ object llmPrompt {
     |""".stripMargin
     }
   }
+  case class CreateFiles(
+      userRequest: String,
+      assistantMessage: String =
+        s"You are given a user requirement wrapped in ${tagsInUse.queryStart} and ${tagsInUse.queryEnd}, and a TASK requirement at ${tagsInUse.task}. " +
+          "You are going to return the code snippet according to the TASK requirement. "
+  ) extends Prompt(assistantMessage) {
+    def generatePrompt = {
+      import functorcoder.algo.treeParse
 
-  /** tags, placeholders and templates used in the prompt
-    *
-    * for code completion
-    */
-  case class QueryTags(
-      hole: String, //
-      queryStart: String,
-      queryEnd: String,
-      task: String
-  )
+      val task =
+        s"parse the prompt response to tree of files and folders in the format: ${treeParse.exampleSyntax}. An example input is: ${treeParse.exampleInput}"
 
-  val tags1 =
-    QueryTags(
-      hole = "{{HOLE}}", //
-      queryStart = "{{QUERY_START}}",
-      queryEnd = "{{QUERY_END}}",
-      task = "{{TASK}}"
-    )
+      s"""${tagsInUse.queryStart}
+    |${userRequest}
+    |${tagsInUse.queryEnd}
+    |${tagsInUse.task} : ${task}
+    |""".stripMargin
+    }
+  }
 
   /** prompts engineering
     *
@@ -100,9 +122,6 @@ object llmPrompt {
         "your task is to replace this hole with your reply." +
         "you only return the string for the hole with indentation, without any quotes"
 
-    val promptTask =
-      "You are given a text or code snippet wrapped in <QUERY> tag and a TASK requirement. " +
-        "You are going to return the new snippet according to the TASK requirement. "
   }
 
   def generateDocs(language: String) = {
