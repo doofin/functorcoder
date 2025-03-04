@@ -21,7 +21,7 @@ object extensionMain {
 
     showMessageAndLog(s"config loaded: ${cfg.toString()}")
     // register all commands
-    vscCommands.registerAllCommands(context)
+    vscCommands.registerAllCommands(context, llm)
 
     // show the status bar
     statusBar.createStatusBarItem(context)

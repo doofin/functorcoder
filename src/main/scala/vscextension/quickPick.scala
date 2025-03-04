@@ -15,6 +15,46 @@ import functorcoder.actions.Commands
   */
 object quickPick {
 
+  def createQuickPick(
+      title: String, //
+      items: Seq[(String, String, () => Unit)],
+      modifies: vscode.QuickPick[vscode.QuickPickItem] => Unit = { _ => }
+  ) = {
+
+    val quickPick: vscode.QuickPick[vscode.QuickPickItem] =
+      vscode.window.createQuickPick()
+
+    quickPick.title = title
+    // to customize the quick pick
+    modifies(quickPick)
+    quickPick.buttons = js.Array(vscode.QuickInputButtons.Back)
+
+    quickPick.items = items.toJSArray.map { (itemStr, itemDesc, _) => //
+      vscode
+        .QuickPickItem(itemStr)
+        .setAlwaysShow(true)
+        .setButtons(js.Array(vscode.QuickInputButtons.Back))
+        .setDescription(itemStr + " description")
+        .setDetail(itemDesc + " detail")
+    }
+
+    quickPick.onDidChangeSelection { selection =>
+      println(s"selected: ${selection(0).label}")
+      // execute the function associated with the selected item
+      val selected = items.find(_._1 == selection(0).label)
+      selected.foreach { (_, _, fun) =>
+        fun()
+        quickPick.hide()
+      }
+    }
+
+    quickPick.onDidHide({ _ =>
+      quickPick.hide()
+    })
+
+    quickPick.show()
+  }
+
   def showQuickPick(arg: Any): Unit = {
     val items =
       Commands.mainMenuItems.map(_._1).toJSArray
@@ -62,4 +102,5 @@ object quickPick {
 
     quickPick.show()
   }
+
 }

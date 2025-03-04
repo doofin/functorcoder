@@ -42,8 +42,12 @@
         },
         "commands": [
             {
-                "command": "extension.helloWorld",
-                "title": "Hello World"
+                "command": "functorcoder.menu",
+                "title": "functorcoder main menu"
+            },
+            {
+                "command": "functorcoder.createFiles",
+                "title": "generate files and folders"
             }
         ],
         "menus": {

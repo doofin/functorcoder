@@ -5,6 +5,7 @@ import typings.vscode.mod as vscode
 import scala.scalajs.js
 
 import facade.vscodeUtils.*
+import functorcoder.llm.llmMain.llmAgent
 
 /** Commands are actions that a user can invoke in the vscode extension with command palette (ctrl+shift+p).
   *
@@ -17,10 +18,10 @@ object vscCommands {
     * @param context
     *   the vscode extension context
     */
-  def registerAllCommands(context: vscode.ExtensionContext) = {
+  def registerAllCommands(context: vscode.ExtensionContext, llm: llmAgent) = {
 
     val allCommands =
-      functorcoder.actions.Commands.commandList
+      functorcoder.actions.Commands.commandList(llm)
     // register the commands
     allCommands foreach { (name, fun) =>
       context.pushDisposable(

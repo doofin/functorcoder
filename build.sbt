@@ -71,7 +71,7 @@ lazy val root = project
   )
 
 addCommandAlias("compile", ";fastOptJS")
-addCommandAlias("dev", "~fastOptJS")
+addCommandAlias("dev", "~buildDebug")
 addCommandAlias("fix", ";scalafixEnable;scalafixAll;")
 // open, buildDebug are other commands added
 

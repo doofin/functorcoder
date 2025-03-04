@@ -87,14 +87,14 @@ object llmPrompt {
   case class CreateFiles(
       userRequest: String,
       assistantMessage: String =
-        s"You are given a user requirement wrapped in ${tagsInUse.queryStart} and ${tagsInUse.queryEnd}, and a TASK requirement at ${tagsInUse.task}. " +
+        s"You are given a user requirement wrapped in ${tagsInUse.queryStart} and ${tagsInUse.queryEnd}, and a TASK requirement ${tagsInUse.task}. " +
           "You are going to return the code snippet according to the TASK requirement. "
   ) extends Prompt(assistantMessage) {
     def generatePrompt = {
       import functorcoder.algo.treeParse
 
       val task =
-        s"parse the prompt response to tree of files and folders in the format: ${treeParse.exampleSyntax}. An example input is: ${treeParse.exampleInput}"
+        s"parse the prompt response to tree of files and folders in the format: ${treeParse.exampleSyntax}. An example input is: ${treeParse.exampleInput}. return the tree data structure in that format."
 
       s"""${tagsInUse.queryStart}
     |${userRequest}

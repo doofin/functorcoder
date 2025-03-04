@@ -11,6 +11,8 @@ import vscextension.quickPick
 import vscextension.facade.vscodeUtils.showMessageAndLog
 
 import functorcoder.types.editorCtx.codeActionParam
+import functorcoder.llm.llmMain.llmAgent
+import functorcoder.algo.treeParse
 
 /** Commands are actions that a user can invoke in the vscode extension with command palette (ctrl+shift+p).
   */
@@ -22,11 +24,15 @@ object Commands {
   val commandAddDocumentation =
     ("functorcoder.addDocumentation", addDocumentation)
 
+  val commandCreateFiles =
+    ("functorcoder.createFiles", createFilesCmd)
+
   // list of all commands to be registered
-  val commandList: Seq[(String, CommandT)] =
+  def commandList(llm: llmAgent): Seq[(String, CommandT)] =
     Seq(
       commandMenu,
-      commandAddDocumentation
+      commandAddDocumentation,
+      (commandCreateFiles._1, commandCreateFiles._2(llm))
     )
 
     // the main menu items
@@ -54,6 +60,38 @@ object Commands {
 
     }
 
-    // showMessageAndLog("add documentation: " + s"${dyn.uri}, ${dyn.range}, ${dyn.llmResponse}")
+  }
+
+  def createFilesCmd(llm: llmAgent)(arg: Any) = {
+    val inputBoxOptions =
+      vscode
+        .InputBoxOptions()
+        .setTitle("generate files and folders")
+        .setPlaceHolder("type your description here")
+
+    for {
+      input <- vscode.window.showInputBox(inputBoxOptions).toFuture
+      response <- llm.sendPrompt(
+        functorcoder.llm.llmPrompt.CreateFiles(input match {
+          case _: Unit   => "empty input!"
+          case s: String => s
+        })
+      )
+    } yield {
+      showMessageAndLog("create files: " + s"${response}")
+      val tree = treeParse.parse(response)
+      quickPick.createQuickPick(
+        title = "Files and Folders",
+        items = Seq(
+          (
+            "files created!",
+            tree.toString,
+            { () =>
+              showMessageAndLog("files created!")
+            }
+          )
+        )
+      )
+    }
   }
 }
