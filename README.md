@@ -1,5 +1,5 @@
 # functorcoder
-Open source AI coding assistant "**functorcoder**" is a AI coding assistant utilizing LLM (Large Language Model) with algebraic and modular design.
+ **functorcoder** is an open source AI coding assistant utilizing LLM (Large Language Model) with algebraic and modular design.
 
 features:
 - code generation: completion, documentation

@@ -46,6 +46,7 @@ object inlineCompletions {
             )
           }.toJSPromise
 
+        statusBar.showSpininngStatusBarItem("functorcoder", providerResultF)
         providerResultF.asInstanceOf[typings.vscode.mod.ProviderResult[
           scala.scalajs.js.Array[typings.vscode.mod.InlineCompletionItem] | typings.vscode.mod.InlineCompletionList
         ]]

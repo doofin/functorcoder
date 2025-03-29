@@ -13,6 +13,7 @@ import vscextension.facade.vscodeUtils.showMessageAndLog
 import functorcoder.types.editorCtx.codeActionParam
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.algo.treeParse
+import vscextension.statusBar
 
 /** Commands are actions that a user can invoke in the vscode extension with command palette (ctrl+shift+p).
   */
@@ -45,6 +46,9 @@ object Commands {
     val param =
       arg.asInstanceOf[codeActionParam[Future[String]]]
     val llmResponse = param.param
+
+    statusBar.showSpininngStatusBarItem("functorcoder", llmResponse)
+
     llmResponse.foreach { response =>
       showMessageAndLog("add doc: " + s"${param.documentUri}, ${param.range}, ${response}")
       // apply the changes to the document
