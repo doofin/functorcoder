@@ -53,13 +53,13 @@
         "menus": {
             "file/newFile": [
                 {
-                    "command": "extension.helloWorld",
+                    "command": "functorcoder.menu",
                     "group": "navigation"
                 }
             ],
             "editor/context": [
                 {
-                    "command": "extension.helloWorld",
+                    "command": "functorcoder.menu",
                     "group": "1_modification"
                 }
             ]
