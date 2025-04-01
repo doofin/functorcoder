@@ -30,14 +30,16 @@ object CodeActions {
             context: vscode.CodeActionContext
         ) = {
           val selectedCode = document.getText(range)
+          val language = documentProps.getLanguage()
           val llmResponse =
             llm.sendPrompt(
               llmPrompt.Modification(
                 code = selectedCode, //
-                taskRequirement = llmPrompt.generateDocs(documentProps.getLanguage())
+                taskRequirement = llmPrompt.generateDocs(language)
               )
             )
 
+          statusBar.showSpininngStatusBarItem(s"functorcoder($language)", llmResponse)
           val fix1 =
             new vscode.CodeAction(
               title = "add documentation for selected code",

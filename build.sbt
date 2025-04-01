@@ -36,7 +36,6 @@ lazy val root = project
     ),
     libraryDependencies ++= Seq(
       // "com.lihaoyi" %%% "utest" % "0.8.2" % "test",
-      // ("org.latestbit", "circe-tagged-adt-codec", "0.11.0")
       "org.latestbit" %%% "circe-tagged-adt-codec" % "0.11.0",
       "com.github.doofin.stdScala" %%% "stdscala" % "387b33df3a",
 
@@ -74,7 +73,12 @@ addCommandAlias("compile", ";fastOptJS")
 addCommandAlias("dev", "~buildDebug")
 addCommandAlias("fix", ";scalafixEnable;scalafixAll;")
 // open, buildDebug are other commands added
-
+/** prepare the extension and open vscode in extensionDevelopmentPath
+  *
+  * @param openVscode
+  *   whether to open vscode or not. If false, it will just prepare the extension
+  * @return
+  */
 def openVSCodeTask(openVscode: Boolean = true): Def.Initialize[Task[Unit]] =
   Def
     .task[Unit] {
@@ -82,34 +86,28 @@ def openVSCodeTask(openVscode: Boolean = true): Def.Initialize[Task[Unit]] =
       val log = (ThisProject / streams).value.log
 
       val path = base.getCanonicalPath
+
+      printlnOrange("[compiling] extension")
+      val _ = (Compile / fastOptJS).value
       // install deps to out dir
-      // print info with orange color
-      println("\u001b[33m" + "[copying] package.json to out dir" + "\u001b[0m")
+      printlnOrange("[copying] package.json to out dir")
       s"cp package.json ${outdir}/package.json" ! log
       if (!(base / outdir / "node_modules").exists) {
-        println("\u001b[33m" + "[installing] dependencies into out dir with npm" + "\u001b[0m")
+        printlnOrange("[installing] dependencies into out dir with npm")
         s"npm install --prefix ${outdir}" ! log
       } else {
-        println("\u001b[33m" + "[skipping] dependencies installation" + "\u001b[0m")
+        printlnOrange("[skipping] dependencies installation")
       }
       // launch vscode
       if (openVscode) {
         val extenPath = s"${path}/${outdir}"
-        println("\u001b[33m" + "[opening] vscode" + "\u001b[0m")
-        println("\u001b[33m" + s"with extensionDevelopmentPath=${extenPath}" + "\u001b[0m")
+        printlnOrange("[opening] vscode")
+        printlnOrange(s"with extensionDevelopmentPath=${extenPath}")
         s"code --extensionDevelopmentPath=$extenPath" ! log
       }
       ()
     }
-/* lazy val installDependencies = Def.task[Unit] {
-  val base = (ThisProject / baseDirectory).value
-  val log = (ThisProject / streams).value.log
-  if (!(base / "node_module").exists) {
-    val pb =
-      new java.lang.ProcessBuilder("npm", "install")
-        .directory(base)
-        .redirectErrorStream(true)
 
-    pb ! log
-  }
-} */
+def printlnOrange(msg: Any): Unit = {
+  println("\u001b[33m" + msg + "\u001b[0m")
+}

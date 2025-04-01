@@ -50,7 +50,7 @@ object Commands {
     statusBar.showSpininngStatusBarItem("functorcoder", llmResponse)
 
     llmResponse.foreach { response =>
-      showMessageAndLog("add doc: " + s"${param.documentUri}, ${param.range}, ${response}")
+      // showMessageAndLog("add doc: " + s"${param.documentUri}, ${param.range}, ${response}")
       // apply the changes to the document
       vscode.window.activeTextEditor.toOption match {
         case None =>
