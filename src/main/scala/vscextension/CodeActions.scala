@@ -39,6 +39,7 @@ object CodeActions {
               )
             )
 
+            // show the spinner when waiting
           statusBar.showSpininngStatusBarItem(s"functorcoder($language)", llmResponse)
           val fix1 =
             new vscode.CodeAction(

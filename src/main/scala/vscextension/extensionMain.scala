@@ -19,7 +19,7 @@ object extensionMain {
     val cfg = settings.readConfig()
     val llm = functorcoder.llm.llmMain.llmAgent(cfg)
 
-    showMessageAndLog(s"config loaded: ${cfg.toString()}")
+    // showMessageAndLog(s"config loaded: ${cfg.toString()}")
     // register all commands
     vscCommands.registerAllCommands(context, llm)
 
@@ -27,7 +27,7 @@ object extensionMain {
     statusBar.createStatusBarItem(context)
     // statusBarItem.text = "functorcoder ok"
     // show the current language of the document
-    documentProps.showProps
+    // documentProps.showProps
 
     // register inline completions like github copilot
     inlineCompletions.registerInlineCompletions(llm)

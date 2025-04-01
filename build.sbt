@@ -64,9 +64,6 @@ lazy val root = project
     ),
     open := openVSCodeTask().dependsOn(Compile / fastOptJS).value,
     buildDebug := openVSCodeTask(openVscode = false).dependsOn(Compile / fastOptJS).value
-    // open := openVSCodeTask.dependsOn(Compile / fastOptJS / webpack).value,
-    // testFrameworks += new TestFramework("utest.runner.Framework")
-    // publishMarketplace := publishMarketplaceTask.dependsOn(fullOptJS in Compile).value
   )
 
 addCommandAlias("compile", ";fastOptJS")
@@ -82,28 +79,26 @@ addCommandAlias("fix", ";scalafixEnable;scalafixAll;")
 def openVSCodeTask(openVscode: Boolean = true): Def.Initialize[Task[Unit]] =
   Def
     .task[Unit] {
-      val base = (ThisProject / baseDirectory).value
-      val log = (ThisProject / streams).value.log
-
-      val path = base.getCanonicalPath
+      val baseDir = (ThisProject / baseDirectory).value
+      val baseDirPath = baseDir.getCanonicalPath
+      val logger = (ThisProject / streams).value.log
 
       printlnOrange("[compiling] extension")
       val _ = (Compile / fastOptJS).value
       // install deps to out dir
       printlnOrange("[copying] package.json to out dir")
-      s"cp package.json ${outdir}/package.json" ! log
-      if (!(base / outdir / "node_modules").exists) {
+      s"cp package.json ${outdir}/package.json" ! logger
+      if (!(baseDir / outdir / "node_modules").exists) {
         printlnOrange("[installing] dependencies into out dir with npm")
-        s"npm install --prefix ${outdir}" ! log
+        s"npm install --prefix ${outdir}" ! logger
       } else {
         printlnOrange("[skipping] dependencies installation")
       }
       // launch vscode
       if (openVscode) {
-        val extenPath = s"${path}/${outdir}"
-        printlnOrange("[opening] vscode")
-        printlnOrange(s"with extensionDevelopmentPath=${extenPath}")
-        s"code --extensionDevelopmentPath=$extenPath" ! log
+        val extensionPath = s"${baseDirPath}/${outdir}"
+        printlnOrange(s"[opening] vscode" + s"with extensionDevelopmentPath=${extensionPath}")
+        s"code --extensionDevelopmentPath=$extensionPath" ! logger
       }
       ()
     }
