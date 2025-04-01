@@ -36,11 +36,6 @@ object Commands {
       (commandCreateFiles._1, commandCreateFiles._2(llm))
     )
 
-    // the main menu items
-  val mainMenuItems: Seq[(String, () => Unit)] = Seq(
-    "create files" -> { () => println("create files") }
-  )
-
   // individual command handlers
   def addDocumentation(arg: Any) = {
     val param =

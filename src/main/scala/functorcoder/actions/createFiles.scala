@@ -1,6 +1,5 @@
 package functorcoder.actions
 
-import scala.collection.mutable.ArrayBuffer
 import com.doofin.stdScala.dataTypes.Tree.TreeNode
 import functorcoder.algo.treeParse
 import vscextension.facade.vscodeUtils.showMessageAndLog

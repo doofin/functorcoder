@@ -5,7 +5,6 @@ import scala.scalajs.js
 
 import typings.vscode.mod as vscode
 import typings.vscode.mod.Command
-import scala.scalajs.js.Promise
 
 /** a dialog in the editor that users can accept or reject
   *

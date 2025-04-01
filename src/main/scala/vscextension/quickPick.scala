@@ -1,13 +1,10 @@
 package vscextension
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
 
 import typings.vscode.mod as vscode
 
-import facade.vscodeUtils.*
-import functorcoder.actions.Commands
 
 /** Show a quick pick palette to select items in multiple steps
   *
@@ -56,30 +53,35 @@ object quickPick {
   }
 
   def showQuickPick(arg: Any): Unit = {
-    val items =
-      Commands.mainMenuItems.map(_._1).toJSArray
+    val mMenu = functorcoder.editorUI.menu.myMenu
 
     val quickPick: vscode.QuickPick[vscode.QuickPickItem] =
       vscode.window.createQuickPick()
 
-    quickPick.title = "Quick Pick"
-    quickPick.placeholder = "pick one item"
-    quickPick.totalSteps = 3
+    quickPick.title = mMenu.title
+    quickPick.placeholder = "select an action"
+    // quickPick.totalSteps = 3
     quickPick.buttons = js.Array(vscode.QuickInputButtons.Back)
 
-    // option items for user to pick
-    quickPick.items = items.map { itemStr => //
+    // set the items in the quick pick
+    quickPick.items = mMenu.menuItems.map(_._1).toJSArray.map { itemStr => //
       vscode
-        .QuickPickItem(itemStr)
-        .setAlwaysShow(true)
-        .setButtons(js.Array(vscode.QuickInputButtons.Back))
-        .setDescription(itemStr + " description")
-        .setDetail(itemStr + " detail")
+        .QuickPickItem(itemStr) // label is itemStr
+        // .setAlwaysShow(true)
+        // .setButtons(js.Array(vscode.QuickInputButtons.Back))
+        .setDescription(itemStr)
+      // .setDetail(itemStr + " detail")
     }
 
     quickPick.onDidChangeSelection { selection =>
-      println(s"selected: ${selection(0).label}")
-      if (selection(0).label == "item1") {
+      val selectedLabel = selection(0).label
+      // execute the function associated with the selected item
+      mMenu.menuItems.find(_._1 == selectedLabel).foreach { (_, fun) =>
+        fun()
+        quickPick.hide()
+      }
+
+      /* if (selection(0).label == "item1") {
         println(s"selected: ${selection(0).label}")
 
         // show another input box after selecting item1
@@ -93,7 +95,8 @@ object quickPick {
           showMessage("input: " + input)
         }
 
-      }
+      } */
+
     }
 
     quickPick.onDidHide({ _ =>
