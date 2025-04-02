@@ -13,9 +13,9 @@ object extensionMain {
     */
   @JSExportTopLevel("activate") // Exports the function to javascript so that VSCode can load it
   def activate(context: vscode.ExtensionContext): Unit = {
-    showMessageAndLog("congrats, your scala.js vscode extension is loaded")
+    // showMessageAndLog("congrats, your scala.js vscode extension is loaded")
 
-    vscode.workspace.rootPath.getOrElse("")
+    // vscode.workspace.rootPath.getOrElse("")
     val cfg = settings.readConfig()
     val llm = functorcoder.llm.llmMain.llmAgent(cfg)
 

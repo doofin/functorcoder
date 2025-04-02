@@ -47,7 +47,7 @@
             },
             {
                 "command": "functorcoder.createFiles",
-                "title": "generate files and folders"
+                "title": "create files and folders"
             }
         ],
         "menus": {

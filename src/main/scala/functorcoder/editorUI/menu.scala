@@ -1,6 +1,8 @@
 package functorcoder.editorUI
 
+import typings.vscode.mod as vscode
 import vscextension.facade.vscodeUtils.*
+import vscextension.quickPick
 
 object menu {
   case class Menu(
@@ -9,7 +11,16 @@ object menu {
   )
   // the menu items
   val mainMenuItems: Seq[(String, () => Unit)] = Seq(
-    "create files" -> { () => showMessageAndLog("create files") },
+    "create files" -> { () =>
+      quickPick.createInputBox(
+        title = "Create files/folders description",
+        placeHolder = "describe your project",
+        onInput = { input =>
+          showMessageAndLog("input: " + input)
+        }
+      )
+
+    },
     "disable autocomplete" -> { () => showMessageAndLog("disable autocomplete") }
   )
 

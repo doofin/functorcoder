@@ -2,9 +2,9 @@ package vscextension
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import typings.vscode.mod as vscode
-
 
 /** Show a quick pick palette to select items in multiple steps
   *
@@ -14,6 +14,7 @@ object quickPick {
 
   def createQuickPick(
       title: String, //
+      placeHolder: String,
       items: Seq[(String, String, () => Unit)],
       modifies: vscode.QuickPick[vscode.QuickPickItem] => Unit = { _ => }
   ) = {
@@ -22,6 +23,7 @@ object quickPick {
       vscode.window.createQuickPick()
 
     quickPick.title = title
+    quickPick.placeholder = placeHolder
     // to customize the quick pick
     modifies(quickPick)
     quickPick.buttons = js.Array(vscode.QuickInputButtons.Back)
@@ -81,22 +83,6 @@ object quickPick {
         quickPick.hide()
       }
 
-      /* if (selection(0).label == "item1") {
-        println(s"selected: ${selection(0).label}")
-
-        // show another input box after selecting item1
-        val inputBoxOptions =
-          vscode
-            .InputBoxOptions()
-            .setTitle("Input Box")
-            .setPlaceHolder("type something")
-
-        vscode.window.showInputBox(inputBoxOptions).toFuture.foreach { input =>
-          showMessage("input: " + input)
-        }
-
-      } */
-
     }
 
     quickPick.onDidHide({ _ =>
@@ -106,4 +92,31 @@ object quickPick {
     quickPick.show()
   }
 
+  /** create an input box for string
+    *
+    * @param title
+    *   the title of the input box
+    * @param placeHolder
+    *   the placeholder text
+    * @param onInput
+    *   the function to call when input is received
+    */
+  def createInputBox(
+      title: String,
+      placeHolder: String,
+      onInput: String => Unit
+  ) = {
+    val inputBoxOptions =
+      vscode
+        .InputBoxOptions()
+        .setTitle(title)
+        .setPlaceHolder(placeHolder)
+
+    vscode.window.showInputBox(inputBoxOptions).toFuture.foreach { inputO =>
+      inputO.toOption match {
+        case None        =>
+        case Some(input) => onInput(input)
+      }
+    }
+  }
 }

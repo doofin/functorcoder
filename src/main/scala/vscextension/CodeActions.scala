@@ -55,7 +55,7 @@ object CodeActions {
               // invoke command
               command = vscode
                 .Command(
-                  command = functorcoder.actions.Commands.commandAddDocumentation._1, //
+                  command = functorcoder.actions.Commands.cmdAddDocs._1, //
                   title = "add documentation" //
                 )
                 .setArguments(js.Array(args))

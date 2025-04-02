@@ -8,6 +8,16 @@ import vscextension.facade.vscodeUtils.showMessageAndLog
   */
 object createFiles {
 
+  /** parse the prompt response to list of files and folders
+    *
+    * The prompt response is like: [(dir1/file1,"content1"), (dir2/file2,"content2")]
+    *
+    * it should return list like: List((dir1/file1, "content1"), (dir2/file2, "content2"))
+    * @param promptResponse
+    *   the response from the prompt
+    */
+  def parseFilesList(promptResponse: String, retry: Int = 3): Unit = {}
+
   /** parse the prompt response to tree of files and folders
     *
     * The prompt response is like: (root [(folder1 [(file1 file2) folder2]) folder3])

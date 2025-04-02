@@ -20,20 +20,20 @@ import vscextension.statusBar
 object Commands {
   type CommandT = Any => Any
   // all the commands here
-  val commandMenu =
+  val cmdShowMenu =
     ("functorcoder.menu", quickPick.showQuickPick)
-  val commandAddDocumentation =
+  val cmdAddDocs =
     ("functorcoder.addDocumentation", addDocumentation)
 
-  val commandCreateFiles =
+  val cmdCreateFiles =
     ("functorcoder.createFiles", createFilesCmd)
 
   // list of all commands to be registered
   def commandList(llm: llmAgent): Seq[(String, CommandT)] =
     Seq(
-      commandMenu,
-      commandAddDocumentation,
-      (commandCreateFiles._1, commandCreateFiles._2(llm))
+      cmdShowMenu,
+      cmdAddDocs,
+      (cmdCreateFiles._1, cmdCreateFiles._2(llm))
     )
 
   // individual command handlers
@@ -62,13 +62,35 @@ object Commands {
   }
 
   def createFilesCmd(llm: llmAgent)(arg: Any) = {
-    val inputBoxOptions =
-      vscode
-        .InputBoxOptions()
-        .setTitle("generate files and folders")
-        .setPlaceHolder("type your description here")
+    quickPick.createInputBox(
+      title = "Create files/folders description",
+      placeHolder = "describe your project",
+      onInput = { input =>
+        llm
+          .sendPrompt(
+            functorcoder.llm.llmPrompt.CreateFiles(input)
+          )
+          .foreach { response =>
+            showMessageAndLog("create files: " + s"${response}")
+            val tree = treeParse.parse(response)
+            quickPick.createQuickPick(
+              title = "Files and Folders",
+              placeHolder = "select to apply creation",
+              items = Seq(
+                (
+                  "files created!",
+                  tree.toString,
+                  { () =>
+                    showMessageAndLog("files created!")
+                  }
+                )
+              )
+            )
+          }
+      }
+    )
 
-    for {
+    /* for {
       input <- vscode.window.showInputBox(inputBoxOptions).toFuture
       response <- llm.sendPrompt(
         functorcoder.llm.llmPrompt.CreateFiles(input match {
@@ -91,6 +113,6 @@ object Commands {
           )
         )
       )
-    }
+    } */
   }
 }

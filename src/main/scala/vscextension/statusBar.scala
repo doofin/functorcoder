@@ -17,7 +17,7 @@ object statusBar {
     val name = "functor"
     statusBarItem.text = name
     statusBarItem.name = name
-    statusBarItem.command = Commands.commandMenu._1
+    statusBarItem.command = Commands.cmdShowMenu._1
     statusBarItem.show()
 
     context.pushDisposable(statusBarItem.asInstanceOf[vscode.Disposable])
