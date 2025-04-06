@@ -3,6 +3,7 @@ package functorcoder.editorUI
 import typings.vscode.mod as vscode
 import vscextension.facade.vscodeUtils.*
 import vscextension.quickPick
+import functorcoder.llm.llmMain.llmAgent
 
 object menu {
   case class Menu(
@@ -25,8 +26,10 @@ object menu {
   )
 
   // the main menu
-  val myMenu = Menu(
-    title = "functorcoder menu",
-    menuItems = mainMenuItems
-  )
+  def getMainMenu(llm: llmAgent) = {
+    Menu(
+      title = "functorcoder menu",
+      menuItems = mainMenuItems
+    )
+  }
 }

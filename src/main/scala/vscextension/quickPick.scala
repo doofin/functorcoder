@@ -5,6 +5,7 @@ import scala.scalajs.js.JSConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import typings.vscode.mod as vscode
+import functorcoder.llm.llmMain.llmAgent
 
 /** Show a quick pick palette to select items in multiple steps
   *
@@ -54,8 +55,8 @@ object quickPick {
     quickPick.show()
   }
 
-  def showQuickPick(arg: Any): Unit = {
-    val mMenu = functorcoder.editorUI.menu.myMenu
+  def showMainMenu(llm: llmAgent)(arg: Any): Unit = {
+    val mMenu = functorcoder.editorUI.menu.getMainMenu(llm)
 
     val quickPick: vscode.QuickPick[vscode.QuickPickItem] =
       vscode.window.createQuickPick()

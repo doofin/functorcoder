@@ -7,10 +7,11 @@ import functorcoder.actions.Commands
 import scala.concurrent.Future
 import scala.scalajs.js.JSConverters.JSRichFutureNonThenable
 import scala.concurrent.ExecutionContext.Implicits.global
+import functorcoder.llm.llmMain.llmAgent
 
 object statusBar {
 
-  def createStatusBarItem(context: vscode.ExtensionContext) = {
+  def createStatusBarItem(context: vscode.ExtensionContext, llm: llmAgent) = {
     val statusBarItem =
       vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right)
 

@@ -21,7 +21,7 @@ object Commands {
   type CommandT = Any => Any
   // all the commands here
   val cmdShowMenu =
-    ("functorcoder.menu", quickPick.showQuickPick)
+    ("functorcoder.menu", quickPick.showMainMenu)
   val cmdAddDocs =
     ("functorcoder.addDocumentation", addDocumentation)
 
@@ -31,7 +31,7 @@ object Commands {
   // list of all commands to be registered
   def commandList(llm: llmAgent): Seq[(String, CommandT)] =
     Seq(
-      cmdShowMenu,
+      (cmdShowMenu._1, cmdShowMenu._2(llm)),
       cmdAddDocs,
       (cmdCreateFiles._1, cmdCreateFiles._2(llm))
     )

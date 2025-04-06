@@ -24,7 +24,7 @@ object extensionMain {
     vscCommands.registerAllCommands(context, llm)
 
     // show the status bar
-    statusBar.createStatusBarItem(context)
+    statusBar.createStatusBarItem(context, llm)
     // statusBarItem.text = "functorcoder ok"
     // show the current language of the document
     // documentProps.showProps
