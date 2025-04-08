@@ -66,53 +66,30 @@ object Commands {
       title = "Create files/folders description",
       placeHolder = "describe your project",
       onInput = { input =>
-        llm
-          .sendPrompt(
+        val respFuture =
+          llm.sendPrompt(
             functorcoder.llm.llmPrompt.CreateFiles(input)
           )
-          .foreach { response =>
-            showMessageAndLog("create files: " + s"${response}")
-            val tree = treeParse.parse(response)
-            quickPick.createQuickPick(
-              title = "Files and Folders",
-              placeHolder = "select to apply creation",
-              items = Seq(
-                (
-                  "files created!",
-                  tree.toString,
-                  { () =>
-                    showMessageAndLog("files created!")
-                  }
-                )
+
+        respFuture.foreach { response =>
+          // parse the response to a tree of files and folders
+          val tree = treeParse.parse(response)
+          quickPick.createQuickPick(
+            title = "Files and Folders",
+            placeHolder = "select to apply creation",
+            items = Seq(
+              (
+                "files created!",
+                tree.toString,
+                { () =>
+                  showMessageAndLog("files created!")
+                }
               )
             )
-          }
+          )
+        }
       }
     )
 
-    /* for {
-      input <- vscode.window.showInputBox(inputBoxOptions).toFuture
-      response <- llm.sendPrompt(
-        functorcoder.llm.llmPrompt.CreateFiles(input match {
-          case _: Unit   => "empty input!"
-          case s: String => s
-        })
-      )
-    } yield {
-      showMessageAndLog("create files: " + s"${response}")
-      val tree = treeParse.parse(response)
-      quickPick.createQuickPick(
-        title = "Files and Folders",
-        items = Seq(
-          (
-            "files created!",
-            tree.toString,
-            { () =>
-              showMessageAndLog("files created!")
-            }
-          )
-        )
-      )
-    } */
   }
 }

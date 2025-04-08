@@ -13,11 +13,22 @@ import functorcoder.llm.llmMain.llmAgent
   */
 object quickPick {
 
+  /** create a quick pick with a list of items
+    *
+    * @param title
+    *   the title of the quick pick
+    * @param placeHolder
+    *   the placeholder text
+    * @param items
+    *   (label, description, function) a list of items to show in the quick pick
+    * @param modifieF
+    *   a function to modify the quick pick (e.g. add buttons)
+    */
   def createQuickPick(
       title: String, //
       placeHolder: String,
       items: Seq[(String, String, () => Unit)],
-      modifies: vscode.QuickPick[vscode.QuickPickItem] => Unit = { _ => }
+      modifieF: vscode.QuickPick[vscode.QuickPickItem] => Unit = { _ => }
   ) = {
 
     val quickPick: vscode.QuickPick[vscode.QuickPickItem] =
@@ -26,7 +37,7 @@ object quickPick {
     quickPick.title = title
     quickPick.placeholder = placeHolder
     // to customize the quick pick
-    modifies(quickPick)
+    modifieF(quickPick)
     quickPick.buttons = js.Array(vscode.QuickInputButtons.Back)
 
     quickPick.items = items.toJSArray.map { (itemStr, itemDesc, _) => //
@@ -53,44 +64,17 @@ object quickPick {
     })
 
     quickPick.show()
+    quickPick
   }
 
   def showMainMenu(llm: llmAgent)(arg: Any): Unit = {
     val mMenu = functorcoder.editorUI.menu.getMainMenu(llm)
 
-    val quickPick: vscode.QuickPick[vscode.QuickPickItem] =
-      vscode.window.createQuickPick()
-
-    quickPick.title = mMenu.title
-    quickPick.placeholder = "select an action"
-    // quickPick.totalSteps = 3
-    quickPick.buttons = js.Array(vscode.QuickInputButtons.Back)
-
-    // set the items in the quick pick
-    quickPick.items = mMenu.menuItems.map(_._1).toJSArray.map { itemStr => //
-      vscode
-        .QuickPickItem(itemStr) // label is itemStr
-        // .setAlwaysShow(true)
-        // .setButtons(js.Array(vscode.QuickInputButtons.Back))
-        .setDescription(itemStr)
-      // .setDetail(itemStr + " detail")
-    }
-
-    quickPick.onDidChangeSelection { selection =>
-      val selectedLabel = selection(0).label
-      // execute the function associated with the selected item
-      mMenu.menuItems.find(_._1 == selectedLabel).foreach { (_, fun) =>
-        fun()
-        quickPick.hide()
-      }
-
-    }
-
-    quickPick.onDidHide({ _ =>
-      quickPick.hide()
-    })
-
-    quickPick.show()
+    createQuickPick(
+      title = mMenu.title,
+      placeHolder = "select an action",
+      items = mMenu.menuItems.map(x => (x._1, x._1, x._2)).toSeq
+    )
   }
 
   /** create an input box for string
