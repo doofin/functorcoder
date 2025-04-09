@@ -5,7 +5,7 @@ import typings.vscode.mod.TextEditor
 
 import facade.vscodeUtils.*
 
-object documentProps {
+object editorAPI {
 
   /** Shows various properties of the current document and editor
     *
@@ -26,5 +26,9 @@ object documentProps {
       case Some(editor) =>
         editor.document.languageId
     }
+  }
+
+  def getCurrentDirectory() = {
+    vscode.window.activeTextEditor.toOption.map(_.document.uri.path)
   }
 }

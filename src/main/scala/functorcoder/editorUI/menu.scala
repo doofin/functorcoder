@@ -5,7 +5,6 @@ import vscextension.facade.vscodeUtils.*
 import vscextension.quickPick
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.actions.Commands
-import cats.syntax.show
 
 object menu {
   case class Menu(

@@ -45,8 +45,8 @@ object quickPick {
         .QuickPickItem(itemStr)
         .setAlwaysShow(true)
         .setButtons(js.Array(vscode.QuickInputButtons.Back))
-        .setDescription(itemStr + " description")
-        .setDetail(itemDesc + " detail")
+        .setDescription(itemStr)
+        .setDetail(itemDesc)
     }
 
     quickPick.onDidChangeSelection { selection =>

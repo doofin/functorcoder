@@ -14,6 +14,7 @@ import functorcoder.types.editorCtx.codeActionParam
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.algo.treeParse
 import vscextension.statusBar
+import vscextension.editorAPI
 
 /** Commands are actions that a user can invoke in the vscode extension with command palette (ctrl+shift+p).
   */
@@ -62,34 +63,66 @@ object Commands {
   }
 
   def createFilesCmd(llm: llmAgent)(arg: Any) = {
-    quickPick.createInputBox(
-      title = "Create files/folders description",
-      placeHolder = "describe your project",
-      onInput = { input =>
-        val respFuture =
-          llm.sendPrompt(
-            functorcoder.llm.llmPrompt.CreateFiles(input)
-          )
+    val currDir = editorAPI.getCurrentDirectory()
 
-        respFuture.foreach { response =>
-          // parse the response to a tree of files and folders
-          val tree = treeParse.parse(response)
-          quickPick.createQuickPick(
-            title = "Files and Folders",
-            placeHolder = "select to apply creation",
-            items = Seq(
-              (
-                "files created!",
-                tree.toString,
-                { () =>
-                  showMessageAndLog("files created!")
-                }
-              )
+    currDir match {
+      case None =>
+        showMessageAndLog("no current directory, please open a file")
+      case Some(value) =>
+        // split the path
+        val pathParts = value.split("/")
+        // generate the full path for parent and 1 to 5 levels up
+        val parentPaths =
+          (1 to 5).map { i =>
+            pathParts.take(pathParts.length - i).mkString("/")
+          }
+        showMessageAndLog(
+          "parent paths: " + parentPaths.mkString(", ")
+        )
+        quickPick.createQuickPick(
+          title = "create files/folders",
+          placeHolder = "select a parent folder",
+          items = parentPaths.map { path =>
+            (
+              path,
+              "",
+              { () =>
+                // create the files and folders according to the tree
+                showMessageAndLog("creating files in: " + path)
+                quickPick.createInputBox(
+                  title = "Create files/folders description",
+                  placeHolder = "describe your project",
+                  onInput = { input =>
+                    val respFuture = llm.sendPrompt(functorcoder.llm.llmPrompt.CreateFiles(input))
+                  respFuture.foreach { response =>
+                    // parse the response to a tree of files and folders
+                    val tree = treeParse.parse(response)
+                    showMessageAndLog("current directory: " + currDir)
+
+                    quickPick.createQuickPick(
+                      title = "Files and Folders",
+                      placeHolder = "select to apply creating files and folders",
+                      items = Seq(
+                        (
+                          "files created!",
+                          "",
+                          { () =>
+                            // create the files and folders according to the tree
+                            tree.toString
+                            showMessageAndLog("files created!")
+                          }
+                        )
+                      )
+                    )
+                  }
+                  }
+                )
+
+              }
             )
-          )
-        }
-      }
-    )
+          }
+        )
+    }
 
   }
 }

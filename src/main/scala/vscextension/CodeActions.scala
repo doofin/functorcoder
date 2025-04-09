@@ -30,7 +30,7 @@ object CodeActions {
             context: vscode.CodeActionContext
         ) = {
           val selectedCode = document.getText(range)
-          val language = documentProps.getLanguage()
+          val language = editorAPI.getLanguage()
           val llmResponse =
             llm.sendPrompt(
               llmPrompt.Modification(
