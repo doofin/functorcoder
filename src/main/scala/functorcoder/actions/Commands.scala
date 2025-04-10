@@ -71,14 +71,12 @@ object Commands {
       case Some(value) =>
         // split the path
         val pathParts = value.split("/")
-        // generate the full path for parent and 1 to 5 levels up
+        // generate parent path for and 1 to 5 levels up
         val parentPaths =
           (1 to 5).map { i =>
             pathParts.take(pathParts.length - i).mkString("/")
           }
-        showMessageAndLog(
-          "parent paths: " + parentPaths.mkString(", ")
-        )
+
         quickPick.createQuickPick(
           title = "create files/folders",
           placeHolder = "select a parent folder",
@@ -90,26 +88,37 @@ object Commands {
                 // create the files and folders according to the tree
                 showMessageAndLog("creating files in: " + path)
                 quickPick.createInputBox(
-                  title = "Create files/folders description",
+                  title = "Create files/folders under " + path,
                   placeHolder = "describe your project",
                   onInput = { input =>
                     val respFuture = llm.sendPrompt(functorcoder.llm.llmPrompt.CreateFiles(input))
                   respFuture.foreach { response =>
                     // parse the response to a tree of files and folders
-                    val tree = treeParse.parse(response)
-                    showMessageAndLog("current directory: " + currDir)
+                    val treeOpt = treeParse.parse(response)
+                    val filesList = treeOpt.map(createFiles.tree2list).getOrElse(Seq()).mkString(", ")
 
                     quickPick.createQuickPick(
                       title = "Files and Folders",
                       placeHolder = "select to apply creating files and folders",
                       items = Seq(
                         (
-                          "files created!",
+                          s"create $filesList",
                           "",
                           { () =>
+                            treeOpt match {
+                              case scala.util.Success(tree) =>
+                                createFiles.createFilesAndFolders(
+                                  tree,
+                                  path
+                                )
+                              case scala.util.Failure(exception) =>
+                                showMessageAndLog(
+                                  s"Failed to parse tree: ${treeOpt.toString}, exception: ${exception.getMessage}"
+                                )
+                            }
                             // create the files and folders according to the tree
-                            tree.toString
-                            showMessageAndLog("files created!")
+
+                            // showMessageAndLog("files created!")
                           }
                         )
                       )

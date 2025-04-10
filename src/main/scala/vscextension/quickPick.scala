@@ -40,14 +40,13 @@ object quickPick {
     modifieF(quickPick)
     quickPick.buttons = js.Array(vscode.QuickInputButtons.Back)
 
-    quickPick.items = items.toJSArray.map { (itemStr, itemDesc, _) => //
+    quickPick.items = items.map { (itemStr, itemDesc, _) => //
       vscode
         .QuickPickItem(itemStr)
         .setAlwaysShow(true)
         .setButtons(js.Array(vscode.QuickInputButtons.Back))
-        .setDescription(itemStr)
         .setDetail(itemDesc)
-    }
+    }.toJSArray
 
     quickPick.onDidChangeSelection { selection =>
       println(s"selected: ${selection(0).label}")

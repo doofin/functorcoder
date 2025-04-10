@@ -32,7 +32,7 @@ object createFiles {
 
     treeParse.parse(promptResponse) match {
       case scala.util.Success(tree) =>
-        createFilesAndFolders(tree)
+        createFilesAndFolders(tree, "")
       case scala.util.Failure(exception) =>
         showMessageAndLog(s"Trying again with $retry retries left")
         if (retry > 0) {
@@ -47,12 +47,26 @@ object createFiles {
     * @param tree
     *   the tree of files and folders
     */
-  def createFilesAndFolders(tree: TreeNode[String]): Unit = {
+  def createFilesAndFolders(tree: TreeNode[String], parentPath0: String): Unit = {
     // recursively create files and folders
     showMessageAndLog(s"Files and folders tree: $tree")
     val TreeNode(root, children) = tree
+    val parentPath: String = parentPath0 + "/" + root
+
     children.foreach { child =>
-      createFilesAndFolders(child)
+      val file = child.value
+      showMessageAndLog(s"Creating file in $parentPath, file: $file")
+      createFilesAndFolders(child, parentPath)
+    }
+  }
+
+  def tree2list(tree: TreeNode[String]): Seq[String] = {
+    val TreeNode(root, children) = tree
+    val childList = children.flatMap(tree2list)
+    if (childList.isEmpty) {
+      Seq(root)
+    } else {
+      Seq(root) ++ childList
     }
   }
 }

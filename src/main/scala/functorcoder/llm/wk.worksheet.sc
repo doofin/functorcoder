@@ -2,6 +2,7 @@ import functorcoder.llm.llmPrompt
 import functorcoder.llm.llmPrompt.Prompt
 import scala.collection.mutable.ArrayBuffer
 import functorcoder.algo.treeParse
+import functorcoder.actions.createFiles.*
 
 val Modification = llmPrompt
   .Modification(code = "val x = 1", taskRequirement = "add documentation")
@@ -28,3 +29,5 @@ TreeNode("root", ArrayBuffer())
 
 val input = "(root [(folder1 [(file1 file2) folder2]) folder3])"
 val tree = treeParse.parse(input)
+
+tree2list(tree.get)
