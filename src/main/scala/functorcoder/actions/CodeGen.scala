@@ -3,8 +3,9 @@ package functorcoder.actions
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.llm.llmPrompt
 import scala.concurrent.Future
+import vscextension.editorAPI
 
-object CodeCompletion {
+object CodeGen {
 
   /** Generates a code completion suggestion by sending a prompt to a language model.
     *
@@ -29,4 +30,23 @@ object CodeCompletion {
     // assistantMessage: String = promptText.prompt1
     llm.sendPrompt(prompt)
   }
+
+  def getDocumentation(
+      selectedCode: String,
+      llm: llmAgent
+  ) = {
+    val language = editorAPI.getLanguage()
+    val llmResponse =
+      llm.sendPrompt(
+        llmPrompt.Modification(
+          code = selectedCode, //
+          taskRequirement = llmPrompt.generateDocs(language)
+        )
+      )
+
+    val commandName = functorcoder.actions.Commands.cmdAddDocs._1
+
+    (llmResponse, commandName)
+  }
+
 }

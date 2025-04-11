@@ -125,10 +125,10 @@ object llmPrompt {
   }
 
   def generateDocs(language: String) = {
-    "generate short documentation for the input code, " +
-      "and return only the documentation for language: " + language +
-      "the documentation shall be the format according to the language, " +
-      "but don't wrap it with backticks or any other tags."
+    s"generate short documentation for the input code in language: $language." +
+      "return only the documentation, " +
+      "the documentation conform to the format according to the language." +
+      "Don't wrap it with backticks or any other tags."
   }
 }
 

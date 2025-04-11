@@ -10,7 +10,7 @@ import typings.vscode.mod as vscode
 import vscextension.quickPick
 import vscextension.facade.vscodeUtils.showMessageAndLog
 
-import functorcoder.types.editorCtx.codeActionParam
+import functorcoder.types.editorTypes.codeActionParam
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.algo.treeParse
 import vscextension.statusBar

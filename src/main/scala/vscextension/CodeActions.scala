@@ -9,9 +9,10 @@ import typings.vscode.mod as vscode
 import facade.vscodeUtils.*
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.llm.llmPrompt
-import functorcoder.types.editorCtx.*
+import functorcoder.types.editorTypes.*
 import functorcoder.actions.Commands
 import cats.syntax.show
+import functorcoder.actions.CodeGen
 
 /** Code actions are commands provided at the cursor in the editor, so users can
   *
@@ -33,23 +34,21 @@ object CodeActions {
             context: vscode.CodeActionContext
         ) = {
           val selectedCode = document.getText(range)
-          val language = editorAPI.getLanguage()
-          val llmResponse =
-            llm.sendPrompt(
-              llmPrompt.Modification(
-                code = selectedCode, //
-                taskRequirement = llmPrompt.generateDocs(language)
-              )
-            )
 
-            // show the spinner when waiting
-          statusBar.showSpininngStatusBarItem(s"functorcoder($language)", llmResponse)
-          val fix1 =
+          val addDocsItem =
             new vscode.CodeAction(
               title = "add documentation for selected code",
               kind = vscode.CodeActionKind.QuickFix
             ) {
               isPreferred = true // show it first
+              val language = editorAPI.getLanguage()
+              val (llmResponse, commandName) =
+                CodeGen.getDocumentation(
+                  selectedCode,
+                  llm
+                )
+
+              statusBar.showSpininngStatusBarItem(s"functorcoder($language)", llmResponse)
 
               // there are no onSelect events for code actions
               // so we need to create a command and set it here
@@ -60,7 +59,7 @@ object CodeActions {
 
               command = vscode
                 .Command(
-                  command = functorcoder.actions.Commands.cmdAddDocs._1, //
+                  command = commandName, //
                   title = "add documentation" //
                 )
                 .setArguments(
@@ -76,7 +75,7 @@ object CodeActions {
             }
             // can return array or promise of array
 
-          js.Array(fix1)
+          js.Array(addDocsItem)
         }
 
         def provideCodeActions(
