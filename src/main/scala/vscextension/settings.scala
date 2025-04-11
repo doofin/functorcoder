@@ -18,7 +18,8 @@ object settings {
       config.getStringOrEmpty(key = "openaiUrl", default = "https://api.openai.com/v1/chat/completions")
 
     val maxTokens = config.get[Int]("maxTokens").getOrElse(1000)
-    Config(openaiApiKey, openaiUrl, maxTokens)
+    val model = config.getStringOrEmpty("model", default = "gpt-4o-mini")
+    Config(openaiApiKey, openaiUrl, maxTokens, model)
   }
 
   extension (config: vscode.WorkspaceConfiguration) {

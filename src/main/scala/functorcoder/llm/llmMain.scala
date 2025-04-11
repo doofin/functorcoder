@@ -13,13 +13,11 @@ import scala.concurrent.Future
 
 import functorcoder.editorUI.editorConfig
 
-/** large language model (LLM) AI main
-  *
-  * use node-fetch for network requests
+/** large language model (LLM) main entry
   */
 object llmMain {
 
-  /** generate a completion prompt
+  /** prompt data to string
     *
     * change the model here if needed
     *
@@ -37,7 +35,7 @@ object llmMain {
           openaiReq.Message(roles.user, inputPrompt.generatePrompt),
           openaiReq.Message(roles.system, inputPrompt.getAssistantMessage)
         ),
-        openaiReq.models.gpt4oMini,
+        editorCfg.model,
         max_tokens = Some(editorCfg.maxTokens)
       )
 

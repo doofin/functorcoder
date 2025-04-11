@@ -176,6 +176,12 @@ vscode.commands.registerCommand(name, fun).asInstanceOf[Dispose]
 
 You can find more information and tutorials on the [Scala.js website](https://www.scala-js.org/).
 
+# feedback
+features to be implemented:
+- refactoring
+- specify which LLM to use
+
+
 # references:
  - updated from [vscode-scalajs-hello](https://github.com/pme123/vscode-scalajs-hello) with Scala 3.3.3 and sbt.version=1.9.7.
  - [VSCode Extension Samples](https://github.com/microsoft/vscode-extension-samples) repository.

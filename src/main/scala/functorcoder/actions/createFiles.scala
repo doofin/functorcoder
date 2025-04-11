@@ -3,6 +3,7 @@ package functorcoder.actions
 import com.doofin.stdScala.dataTypes.Tree.TreeNode
 import functorcoder.algo.treeParse
 import vscextension.facade.vscodeUtils.showMessageAndLog
+import pprint.PPrinter.BlackWhite
 
 /** create files and folders according to the prompt
   */
@@ -49,13 +50,13 @@ object createFiles {
     */
   def createFilesAndFolders(tree: TreeNode[String], parentPath0: String): Unit = {
     // recursively create files and folders
-    showMessageAndLog(s"Files and folders tree: $tree")
+    val treeStr = BlackWhite.tokenize(tree).map(_.render).mkString("\n")
+    showMessageAndLog(s"Files and folders tree: $treeStr")
     val TreeNode(root, children) = tree
     val parentPath: String = parentPath0 + "/" + root
+    showMessageAndLog(s"Creating file in $parentPath, file: $root")
 
-    children.foreach { child =>
-      val file = child.value
-      showMessageAndLog(s"Creating file in $parentPath, file: $file")
+    children.toSeq.foreach { child =>
       createFilesAndFolders(child, parentPath)
     }
   }

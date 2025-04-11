@@ -5,10 +5,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.*
-
 import scala.scalajs.js.Promise
-import functorcoder.llm.llmPrompt
+
 import functorcoder.llm.llmMain.llmAgent
+import functorcoder.actions.CodeCompletion
 import vscextension.facade.vscodeUtils.showMessageAndLog
 
 /** demonstrates how to provide inline completions in the editor. like the github copilot
@@ -29,11 +29,7 @@ object inlineCompletions {
         val codeBefore = document.getText(new vscode.Range(new vscode.Position(0, 0), position))
         val codeAfter = document.getText(new vscode.Range(position, document.positionAt(document.getText().length)))
 
-        val prompt = llmPrompt
-          .Completion(codeWithHole = s"$codeBefore${llmPrompt.promptText.hole}$codeAfter")
-
-        // assistantMessage: String = promptText.prompt1
-        val promptResponseF = llm.sendPrompt(prompt)
+        val promptResponseF = CodeCompletion.getCompletion(codeBefore, codeAfter, llm)
 
         val providerResultF: Promise[scala.scalajs.js.Array[vscode.InlineCompletionItem]] =
           promptResponseF.map { completionText =>
@@ -46,7 +42,8 @@ object inlineCompletions {
             )
           }.toJSPromise
 
-        statusBar.showSpininngStatusBarItem("functorcoder", providerResultF)
+        statusBar.showSpininngStatusBarItem(s"functorcoder(${editorAPI.getLanguage()})", providerResultF)
+
         providerResultF.asInstanceOf[typings.vscode.mod.ProviderResult[
           scala.scalajs.js.Array[typings.vscode.mod.InlineCompletionItem] | typings.vscode.mod.InlineCompletionList
         ]]

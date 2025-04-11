@@ -51,7 +51,7 @@ object llmPrompt {
   case class Completion(
       codeWithHole: String, // code with a hole to fill like {{FILL_HERE}}
       // taskRequirement: String, // like "Fill the {{FILL_HERE}} hole."
-      assistantMessage: String = promptText.prompt1
+      assistantMessage: String = promptText.promptComp1
   ) extends Prompt(assistantMessage) {
     def generatePrompt = {
 
@@ -87,14 +87,14 @@ object llmPrompt {
   case class CreateFiles(
       userRequest: String,
       assistantMessage: String =
-        s"You are given a user requirement wrapped in ${tagsInUse.queryStart} and ${tagsInUse.queryEnd}, and a TASK requirement ${tagsInUse.task}. " +
-          "You are going to return the code snippet according to the TASK requirement. "
+        s"an input is wrapped in ${tagsInUse.queryStart} and ${tagsInUse.queryEnd}, and the requirement is inside ${tagsInUse.task}. " +
+          "from input and requirement, You return the code snippet"
   ) extends Prompt(assistantMessage) {
     def generatePrompt = {
       import functorcoder.algo.treeParse
 
       val task =
-        s"parse the prompt response to tree of files and folders in the format: ${treeParse.exampleSyntax}. An example input is: ${treeParse.exampleInput}. return the tree data structure in that format."
+        s" return tree of files and folders in the format: ${treeParse.exampleSyntax}. An example input is: ${treeParse.exampleInput}. return the tree data structure in that format."
 
       s"""${tagsInUse.queryStart}
     |${userRequest}
@@ -110,12 +110,12 @@ object llmPrompt {
     */
   object promptText {
     val hole = "{{FILL_HERE}}"
-    val prompt1 =
+    val promptComp1 =
       "You are a code or text autocompletion assistant. " +
         s"In the provided input, missing code or text are marked as $hole. " +
         "Your task is to output only the snippet that replace the placeholder, " +
         "ensuring that indentation and formatting remain consistent with the context. Don't quote your output"
-    val prompt2 =
+    val promptComp2 =
       "You are a hole filler," +
         "You are given a string with a hole: " +
         s"$hole  in the string, " +
@@ -144,27 +144,4 @@ function sum_evens(lim) {
 </QUERY>
 
 TASK: Fill the {{FILL_HERE}} hole.
-
-## CORRECT COMPLETION
-
-<COMPLETION>if (i % 2 === 0) {
-      sum += i;
-    }</COMPLETION>
-
-## EXAMPLE QUERY:
-
-<QUERY>
-def sum_list(lst):
-  total = 0
-  for x in lst:
-  {{FILL_HERE}}
-  return total
-
-print sum_list([1, 2, 3])
-</QUERY>
-
-## CORRECT COMPLETION:
-
-<COMPLETION>  total += x</COMPLETION>
-
  */
