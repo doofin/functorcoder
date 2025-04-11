@@ -2,16 +2,12 @@ package vscextension
 
 import scala.scalajs.js
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
 import typings.vscode.mod as vscode
 
 import facade.vscodeUtils.*
 import functorcoder.llm.llmMain.llmAgent
-import functorcoder.llm.llmPrompt
 import functorcoder.types.editorTypes.*
-import functorcoder.actions.Commands
-import cats.syntax.show
 import functorcoder.actions.CodeGen
 
 /** Code actions are commands provided at the cursor in the editor, so users can

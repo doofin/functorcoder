@@ -1,8 +1,6 @@
 package functorcoder.editorUI
 
-import typings.vscode.mod as vscode
 import vscextension.facade.vscodeUtils.*
-import vscextension.quickPick
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.actions.Commands
 

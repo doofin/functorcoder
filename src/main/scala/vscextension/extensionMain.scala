@@ -5,7 +5,6 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 
 import typings.vscode.mod as vscode
 
-import facade.vscodeUtils.*
 
 object extensionMain {
 
