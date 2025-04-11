@@ -16,7 +16,7 @@ object extensionMain {
     // showMessageAndLog("congrats, your scala.js vscode extension is loaded")
 
     // vscode.workspace.rootPath.getOrElse("")
-    val cfg = settings.readConfig()
+    val cfg = vscConfig.readConfig()
     val llm = functorcoder.llm.llmMain.llmAgent(cfg)
 
     // showMessageAndLog(s"config loaded: ${cfg.toString()}")

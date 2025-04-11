@@ -1,16 +1,15 @@
 package functorcoder.llm
 
-import openaiReq.*
-import typings.nodeFetch.mod as nodeFetch
-
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
-
-import vscextension.facade.vscodeUtils.*
 
 import scala.scalajs.js.Thenable.Implicits.*
 import scala.concurrent.Future
 
+import typings.nodeFetch.mod as nodeFetch
+
+import vscextension.facade.vscodeUtils.*
+import openaiReq.*
 import functorcoder.editorUI.editorConfig
 
 /** large language model (LLM) main entry
@@ -27,7 +26,6 @@ object llmMain {
     */
   def prompt2str(editorCfg: editorConfig.Config, inputPrompt: llmPrompt.Prompt) = {
     // showMessageAndLog(s"prompt: ${inputPrompt}")
-    // showMessageAndLog(s"prompt assistant: ${inputPrompt.getAssistantMessage}")
 
     val openAiRequest = openaiReq
       .OpenAiRequest(
@@ -43,6 +41,11 @@ object llmMain {
     openAiRequest.toJson
   }
 
+  /** llm agent to send request to openai api
+    *
+    * @param editorCfg
+    *   the editor configuration
+    */
   case class llmAgent(editorCfg: editorConfig.Config) {
 
     val url = editorCfg.openaiUrl

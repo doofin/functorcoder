@@ -2,6 +2,7 @@ package vscextension
 
 import scala.scalajs.js
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import typings.vscode.mod as vscode
 
@@ -9,6 +10,8 @@ import facade.vscodeUtils.*
 import functorcoder.llm.llmMain.llmAgent
 import functorcoder.llm.llmPrompt
 import functorcoder.types.editorCtx.*
+import functorcoder.actions.Commands
+import cats.syntax.show
 
 /** Code actions are commands provided at the cursor in the editor, so users can
   *
@@ -47,18 +50,28 @@ object CodeActions {
               kind = vscode.CodeActionKind.QuickFix
             ) {
               isPreferred = true // show it first
-              val args: codeActionParam[Future[String]] = new codeActionParam(
-                document.uri.toString(),
-                range,
-                llmResponse
-              )
+
+              // there are no onSelect events for code actions
+              // so we need to create a command and set it here
+              // edit = new vscode.WorkspaceEdit() {
+              //   showMessageAndLog("creating edit") // triggered immediately
+              // }
               // invoke command
+
               command = vscode
                 .Command(
                   command = functorcoder.actions.Commands.cmdAddDocs._1, //
                   title = "add documentation" //
                 )
-                .setArguments(js.Array(args))
+                .setArguments(
+                  js.Array(
+                    new codeActionParam(
+                      document.uri.toString(),
+                      range,
+                      llmResponse
+                    )
+                  )
+                )
 
             }
             // can return array or promise of array

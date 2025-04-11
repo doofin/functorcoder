@@ -38,3 +38,4 @@ out
 /project/target/
 /.bsp/
 
+*.worksheet.sc

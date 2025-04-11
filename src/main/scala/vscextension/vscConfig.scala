@@ -3,7 +3,7 @@ package vscextension
 import typings.vscode.mod as vscode
 import functorcoder.editorUI.editorConfig.Config
 
-object settings {
+object vscConfig {
 
   /** read the configuration from the vscode settings.json
     *
@@ -11,6 +11,8 @@ object settings {
     */
   def readConfig() = {
     val config = vscode.workspace.getConfiguration("functorcoder")
+
+    // get the key values from vscode settings json
     val openaiApiKey =
       config.getStringOrEmpty("openaiApiKey")
 
@@ -18,7 +20,8 @@ object settings {
       config.getStringOrEmpty(key = "openaiUrl", default = "https://api.openai.com/v1/chat/completions")
 
     val maxTokens = config.get[Int]("maxTokens").getOrElse(1000)
-    val model = config.getStringOrEmpty("model", default = "gpt-4o-mini")
+    val model = config.getStringOrEmpty("model", default = "gpt-4o")
+
     Config(openaiApiKey, openaiUrl, maxTokens, model)
   }
 
