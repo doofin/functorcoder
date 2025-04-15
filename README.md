@@ -181,6 +181,7 @@ features to be implemented:
 - refactoring
 - specify which LLM to use
 - RAG(retrieval-augmented generation) to understand the whole code base
+- MCP(model context protocol) to interact with the environment, like external tools, etc.
 
 
 # references:
