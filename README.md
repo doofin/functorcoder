@@ -180,6 +180,7 @@ You can find more information and tutorials on the [Scala.js website](https://ww
 features to be implemented:
 - refactoring
 - specify which LLM to use
+- RAG(retrieval-augmented generation) to understand the whole code base
 
 
 # references:
