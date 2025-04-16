@@ -109,18 +109,18 @@ object llmPrompt {
     * more like art than science. just try different prompts and see what works best
     */
   object promptText {
-    val hole = "{{FILL_HERE}}"
+    val hole = "{{HOLE}}"
     val promptComp1 =
       "You are a code or text autocompletion assistant. " +
         s"In the provided input, missing code or text are marked as $hole. " +
         "Your task is to output only the snippet that replace the placeholder, " +
         "ensuring that indentation and formatting remain consistent with the context. Don't quote your output"
+
     val promptComp2 =
-      "You are a hole filler," +
-        "You are given a string with a hole: " +
-        s"$hole  in the string, " +
-        "your task is to replace this hole with your reply." +
-        "you only return the string for the hole with indentation, without any quotes"
+      "You are a hole filler." +
+        "Given a string with a hole: " + s"$hole  in the string, " +
+        "you replace this hole with your reply." +
+        "only return the string for the hole with indentation, without any quotes"
 
   }
 

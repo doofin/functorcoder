@@ -50,6 +50,9 @@ object createFiles {
     */
   def createFilesAndFolders(tree: TreeNode[String], parentPath0: String): Unit = {
     // recursively create files and folders
+    // mkdir -p src/main/scala/functorcoder/types
+    // touch src/main/scala/functorcoder/types/InputTypes.scala
+    
     val treeStr = BlackWhite.tokenize(tree).map(_.render).mkString("\n")
     showMessageAndLog(s"Files and folders tree: $treeStr")
     val TreeNode(root, children) = tree

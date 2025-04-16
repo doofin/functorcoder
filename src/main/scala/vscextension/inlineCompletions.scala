@@ -33,7 +33,7 @@ object inlineCompletions {
 
         val providerResultF: Promise[scala.scalajs.js.Array[vscode.InlineCompletionItem]] =
           promptResponseF.map { completionText =>
-            showMessageAndLog(s"completionText: $completionText")
+            // showMessageAndLog(s"completionText: $completionText")
             js.Array(
               new vscode.InlineCompletionItem(
                 insertText = completionText, // text to insert
