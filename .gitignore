@@ -39,3 +39,4 @@ out
 /.bsp/
 
 *.worksheet.sc
+.sbtopts
