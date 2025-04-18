@@ -1,5 +1,5 @@
 # functorcoder
-**functorcoder** is an open source AI coding assistant utilizing LLM (Large Language Model) with algebraic and modular design in Scala.js. It's aimed at providing a clean and extensible architecture for AI coding assistants, which is helpful for understanding basic mechanics if you want to build your own AI coding assistant.
+**functorcoder** is an open source AI coding assistant utilizing LLM (Large Language Model) with algebraic and modular design in Scala.js. It aims at providing a clean and extensible architecture for AI coding assistants, which is helpful for understanding basic mechanics if you want to build your own AI coding assistant.
 
 features aiming to implement:
 - code generation: completion, documentation
@@ -9,6 +9,9 @@ features aiming to implement:
 current features implemented:
 - auto completion as you type
 - add documentation quick fix action
+
+## Getting Started
+Visit [vscode-scalajs-hello](https://github.com/doofin/vscode-scalajs-hello) to understand how to play with scala.js for VSCode extension development. Basically, sbt is used to build the project and run the extension.
 
 ## Project Structure
 The project is divided into two main parts: the core module and the VSCode extension module under /src/main/scala/functorcoder and /src/main/scala/vscextension respectively.
@@ -58,6 +61,7 @@ The project file structure for the VSCode extension module:
 │   ├── codeActions.scala         # Code action definitions
 ...
 ```
+
 
 ## design principles
 I am to design the system with mathematics, algebra and functional programming principles in mind. The system is designed to be modular and extensible, allowing for easy addition of new features and components.
