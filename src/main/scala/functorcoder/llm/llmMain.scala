@@ -30,8 +30,8 @@ object llmMain {
     val openAiRequest = openaiReq
       .OpenAiRequest(
         List(
-          openaiReq.Message(roles.user, inputPrompt.generatePrompt),
-          openaiReq.Message(roles.system, inputPrompt.getAssistantMessage)
+          openaiReq.Message(roles.system, inputPrompt.getSysMessage),
+          openaiReq.Message(roles.user, inputPrompt.generatePrompt)
         ),
         editorCfg.model,
         max_tokens = Some(editorCfg.maxTokens)

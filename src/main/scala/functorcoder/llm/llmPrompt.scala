@@ -28,7 +28,7 @@ object llmPrompt {
   // trait will have undefined value, so we use abstract class
   sealed abstract class Prompt(val assistantMsg: String) {
     def generatePrompt: String
-    def getAssistantMessage: String = assistantMsg
+    def getSysMessage: String = assistantMsg
   }
 
   /** code completion prompt
@@ -51,7 +51,7 @@ object llmPrompt {
   case class Completion(
       codeWithHole: String, // code with a hole to fill like {{FILL_HERE}}
       // taskRequirement: String, // like "Fill the {{FILL_HERE}} hole."
-      assistantMessage: String = promptText.promptComp1
+      assistantMessage: String = promptText.promptComp3
   ) extends Prompt(assistantMessage) {
     def generatePrompt = {
 
@@ -122,6 +122,8 @@ object llmPrompt {
         "you replace this hole with your reply." +
         "only return the string for the hole with indentation, without any quotes"
 
+    val promptComp3 = s"Fill in the missing text specified by $hole. Only return the string which replace the hole. " +
+      "Don't wrap it with backticks or any other tags"
   }
 
   def generateDocs(language: String) = {
