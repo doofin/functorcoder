@@ -1,16 +1,20 @@
 {
-    "name": "vscode-scalajs-hello",
-    "displayName": "vscode-scalajs-hello",
-    "description": "",
+    "name": "functorcoder",
+    "displayName": "functorcoder",
+    "description": "an ai coding assistant",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/doofin/functorcoder/"
+    },
     "version": "0.0.1",
-    "publisher": "test",
+    "publisher": "functorcoder.com",
     "categories": [
         "Other"
     ],
     "activationEvents": [
         "*"
     ],
-    "main": "./out/extension",
+    "main": "./extension",
     "engines": {
         "vscode": "^1.84.0"
     },
@@ -22,22 +26,40 @@
         "@types/vscode": "^1.73.0"
     },
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "functorcoder",
+            "properties": {
+                "openaiApiKey": {
+                    "type": "string",
+                    "default": ""
+                },
+                "openaiUrl": {
+                    "type": "string",
+                    "default": ""
+                }
+            }
+        },
         "commands": [
             {
-                "command": "extension.helloWorld",
-                "title": "Hello World"
+                "command": "functorcoder.menu",
+                "title": "functorcoder main menu"
+            },
+            {
+                "command": "functorcoder.createFiles",
+                "title": "create files and folders"
             }
         ],
         "menus": {
             "file/newFile": [
                 {
-                    "command": "extension.helloWorld",
+                    "command": "functorcoder.menu",
                     "group": "navigation"
                 }
             ],
             "editor/context": [
                 {
-                    "command": "extension.helloWorld",
+                    "command": "functorcoder.menu",
                     "group": "1_modification"
                 }
             ]

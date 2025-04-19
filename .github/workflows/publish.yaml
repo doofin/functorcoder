@@ -1,0 +1,61 @@
+name: Release
+
+# trigger on git push for release branch
+on:
+  workflow_dispatch: # allow manual trigger
+  push: 
+    branches:
+      - release    
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  run:
+    name: Build and publish vsix package
+    strategy:
+      matrix:
+        java-version: [17]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    
+      # cache sbt dependencies          
+      - uses: coursier/cache-action@v6 
+
+      # install java, sbt and node
+      - name: Setup Java and sbt
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java-version }}
+          cache: sbt
+      - uses: sbt/setup-sbt@v1
+
+      - name: setup node
+        uses: actions/setup-node@v4
+
+      # install dependencies and build package
+      - name: compile Scala and build js to out/ folder
+        run: 
+          sbt buildDebug
+
+      - name: package extension inside out/ folder
+        run: |
+          cd out/ 
+          ls -la 
+          npx vsce package
+
+      - name: Get upload url
+        id: get_upload_url
+        run: |
+          URL=$(curl --silent "https://api.github.com/repos/doofin/functorcoder/releases/latest" | jq -r '.upload_url')
+          echo ::set-output name=UPLOAD_URL::$URL
+
+      - name: Upload VSIX package to github release
+        uses: softprops/action-gh-release@v2
+        # if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: out/functorcoder-0.0.1.vsix
