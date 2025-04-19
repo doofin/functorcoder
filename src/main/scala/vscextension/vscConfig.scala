@@ -13,16 +13,16 @@ object vscConfig {
     val config = vscode.workspace.getConfiguration("functorcoder")
 
     // get the key values from vscode settings json
-    val openaiApiKey =
-      config.getStringOrEmpty("openaiApiKey")
+    val apiKey =
+      config.getStringOrEmpty("apiKey")
 
-    val openaiUrl =
-      config.getStringOrEmpty(key = "openaiUrl", default = "https://api.openai.com/v1/chat/completions")
+    val apiEndpointUrl =
+      config.getStringOrEmpty(key = "apiUrl", default = "https://api.openai.com/v1/chat/completions")
 
     val maxTokens = config.get[Int]("maxTokens").getOrElse(1000)
     val model = config.getStringOrEmpty("model", default = "gpt-4o")
 
-    Config(openaiApiKey, openaiUrl, maxTokens, model)
+    Config(apiKey, apiEndpointUrl, maxTokens, model)
   }
 
   extension (config: vscode.WorkspaceConfiguration) {

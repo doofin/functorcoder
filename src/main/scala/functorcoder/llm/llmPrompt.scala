@@ -26,9 +26,9 @@ object llmPrompt {
     )
 
   // trait will have undefined value, so we use abstract class
-  sealed abstract class Prompt(val assistantMsg: String) {
+  sealed abstract class Prompt(val ctrlMsg: String) {
     def generatePrompt: String
-    def getSysMessage: String = assistantMsg
+    def getSysMessage: String = ctrlMsg
   }
 
   /** code completion prompt
@@ -51,8 +51,8 @@ object llmPrompt {
   case class Completion(
       codeWithHole: String, // code with a hole to fill like {{FILL_HERE}}
       // taskRequirement: String, // like "Fill the {{FILL_HERE}} hole."
-      assistantMessage: String = promptText.promptComp3
-  ) extends Prompt(assistantMessage) {
+      ctrlMessage: String = promptText.promptComp3
+  ) extends Prompt(ctrlMessage) {
     def generatePrompt = {
 
       codeWithHole
