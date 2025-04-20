@@ -5,6 +5,22 @@ import io.circe.generic.auto._
 import io.circe.*
 import io.circe.syntax.*
 
+/* openAI API request
+https://platform.openai.com/docs/api-reference/chat
+'{
+    "model": "gpt-4o",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "Hello!"
+      }
+    ]
+  }'
+ */
 object openaiReq {
 
   /** https://platform.openai.com/docs/models/model-endpoint-compatibility
@@ -133,19 +149,3 @@ object openaiReq {
   }
 
 }
-/* openAI API request
-https://platform.openai.com/docs/api-reference/chat
-'{
-    "model": "gpt-4o",
-    "messages": [
-      {
-        "role": "system",
-        "content": "You are a helpful assistant."
-      },
-      {
-        "role": "user",
-        "content": "Hello!"
-      }
-    ]
-  }'
- */
