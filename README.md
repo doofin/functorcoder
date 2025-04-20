@@ -1,17 +1,21 @@
 # functorcoder
 **functorcoder** is an open source AI coding assistant utilizing LLM (Large Language Model) with algebraic and modular design in Scala.js. It aims at providing a clean and extensible architecture for AI coding assistants, which is helpful for understanding basic mechanics if you want to build your own AI coding assistant.
 
+current features implemented:
+- auto completion as you type
+- add documentation quick fix action
+
 features aiming to implement:
 - code generation: completion, documentation
 - code modification: refactoring, optimization, bug fixing
 - code analysis: code understanding, code review, code quality
 
-current features implemented:
-- auto completion as you type
-- add documentation quick fix action
-
 ## Getting Started
-Visit [vscode-scalajs-hello](https://github.com/doofin/vscode-scalajs-hello) to understand how to play with scala.js for VSCode extension development. Basically, sbt is used to build the project and run the extension.
+Visit [vscode-scalajs-hello](https://github.com/doofin/vscode-scalajs-hello) to understand how to play with scala.js for VSCode extension development. Basically, sbt is used to build the project and run the extension. There you will learn:
+- setting up the development environment
+- building the project and running the extension
+- packaging the extension
+
 
 Before loading the extension, you need to add options to vscode user settings, and provide your OpenAI compatible API key and URL. Here is an example:
 
@@ -29,7 +33,7 @@ The project is divided into two main parts: the core module and the VSCode exten
 
 **To get started**, read the file `extensionMain.scala` in the VSCode extension module. It is the main entry point for the extension. 
 
-The first part is the core module, containing the main logic of the AI coding assistant:
+The first part is the core module, we aim keeping it concise. It contains the main logic of the ai coding assistant:
 - Large Language Model (LLM) integration
 - sending propmt to LLM and getting the response
 
@@ -46,23 +50,15 @@ project file structure for the core module:
 ```bash
 /functorcoder
 ├── /src/main/scala/functorcoder
-│   ├── /llm
-│   │   ├── LLM.scala              # Large Language Model (LLM) integration
+│   ├── /llm                 # Integration with LLM (e.g., OpenAI API)
 │   ├── /actions
-│   │   ├── CodeCompletion.scala   # Code completion module
-│   │   ├── Refactor.scala         # Refactor code module
-│   │   └── Debug.scala            # Debugging module
-│   ├── /types
-│   │   ├── InputTypes.scala     # Types for code, context, and user actions
-│   │   └── OutputTypes.scala      # Types for output (formatted code, suggestions)
-│   ├── /editorUI
-│   │   ├── EditorIntegration.scala # Integration with the editor (e.g., VSCode)
-│   └── /tests
-│       ├── CoreTests.scala         # Unit tests for core modules
-└── /docs
-    ├── README.md                 # Project overview and setup instructions
-    ├── ARCHITECTURE.md           # Architecture details and design decisions
-    └── API.md                    # API documentation for integration
+│   │   ├── CodeGen.scala    # Code completion, generation, and documentation
+│   │   ├── Commands.scala   # Commands from functorcoder
+│   │   └── Debug.scala      # Debugging module
+│   ├── /types               # Types for code, context, and user actions
+│   ├── /editorUI            # Integration with the editor (e.g., VSCode)
+│   └── /tests               # Unit tests for core modules
+└── /docs                    # Documentation
 ```
 
 The project file structure for the VSCode extension module:
