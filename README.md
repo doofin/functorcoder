@@ -13,8 +13,21 @@ current features implemented:
 ## Getting Started
 Visit [vscode-scalajs-hello](https://github.com/doofin/vscode-scalajs-hello) to understand how to play with scala.js for VSCode extension development. Basically, sbt is used to build the project and run the extension.
 
+Before loading the extension, you need to add options to vscode user settings, and provide your OpenAI compatible API key and URL. Here is an example:
+
+```json
+"functorcoder": {
+        "apiKey": "somekey",
+        "apiUrl": "https://api.openai.com/v1/chat/completions",
+        "maxTokens": 512,
+        "model": "gpt-4o-mini",
+    }
+```
+
 ## Project Structure
 The project is divided into two main parts: the core module and the VSCode extension module under /src/main/scala/functorcoder and /src/main/scala/vscextension respectively.
+
+**To get started**, read the file `extensionMain.scala` in the VSCode extension module. It is the main entry point for the extension. 
 
 The first part is the core module, containing the main logic of the AI coding assistant:
 - Large Language Model (LLM) integration
