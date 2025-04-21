@@ -5,10 +5,19 @@ current features implemented:
 - auto completion as you type
 - add documentation quick fix action
 
-features aiming to implement:
+next important features to be implemented:
+- generate multiple files and folders
+- disable/enable auto completion
+
+features aiming to implement in long term:
 - code generation: completion, documentation
 - code modification: refactoring, optimization, bug fixing
 - code analysis: code understanding, code review, code quality
+
+## 中文简介
+作为一个copilot的用户，最近受到国产开源模型deepseek的鼓励，希望能在开源社区中贡献一些自己的力量。目前已经有一些ai插件，比如copilot, tabnine，cursor等，还有一些开源的插件，比如continue。我看了下continue的代码，发现它的设计很复杂，代码并不简洁。目前，copilot的体验还可以，但是非常封闭，无法自定义很多地方，比如代码补全的长度，模型的选择等。开源的插件则有很多稳定性问题，bug不少。
+
+所以，作为一个scala的爱好者，也希望加深对llm应用的理解，我决定自己用scala.js来实现一个简单的ai助手。
 
 ## Getting Started
 Visit [vscode-scalajs-hello](https://github.com/doofin/vscode-scalajs-hello) to understand how to play with scala.js for VSCode extension development. Basically, sbt is used to build the project and run the extension. There you will learn:
