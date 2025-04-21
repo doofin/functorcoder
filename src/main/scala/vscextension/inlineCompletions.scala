@@ -1,10 +1,15 @@
 package vscextension
+
 import typings.vscode.mod as vscode
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.*
+import scala.scalajs.js.Promise
 
-import facade.vscodeUtils.*
+import functorcoder.llm.llmMain.llmAgent
+import functorcoder.actions.CodeGen
+import vscextension.facade.vscodeUtils.showMessageAndLog
 
 /** demonstrates how to provide inline completions in the editor. like the github copilot
   * https://github.com/microsoft/vscode-extension-samples/tree/main/inline-completions
@@ -12,8 +17,8 @@ import facade.vscodeUtils.*
   */
 object inlineCompletions {
 
-  def createCompletionProvider(): vscode.InlineCompletionItemProvider = {
-    new vscode.InlineCompletionItemProvider {
+  def registerInlineCompletions(llm: llmAgent) = {
+    val mCompletionProvider = new vscode.InlineCompletionItemProvider {
       override def provideInlineCompletionItems(
           document: vscode.TextDocument, // the current document
           position: vscode.Position, // the position of the cursor
@@ -21,29 +26,23 @@ object inlineCompletions {
           token: vscode.CancellationToken // to cancel the completion
       ) = {
 
-        val offset = 0
-        // get the line before the current line
-        val lineBefore =
-          if !(position.line - offset < 0)
-          then document.lineAt(position.line - offset).text
-          else ""
+        val codeBefore = document.getText(new vscode.Range(new vscode.Position(0, 0), position))
+        val codeAfter = document.getText(new vscode.Range(position, document.positionAt(document.getText().length)))
 
-        // the whole line before the cursor
-        showMessage(s"line before cursor: $lineBefore")
+        val promptResponseF = CodeGen.getCompletion(codeBefore, codeAfter, llm)
 
-        // always return a list of items, but only first item will be displayed
-        val items = List("foo", "bar", "baz")
-          // .filter(_.startsWith(word)) // often need to do some filtering
-          .map { str =>
-            new vscode.InlineCompletionItem(
-              insertText = str, // text to insert
-              range = new vscode.Range(position, position)
+        val providerResultF: Promise[scala.scalajs.js.Array[vscode.InlineCompletionItem]] =
+          promptResponseF.map { completionText =>
+            // showMessageAndLog(s"completionText: $completionText")
+            js.Array(
+              new vscode.InlineCompletionItem(
+                insertText = completionText, // text to insert
+                range = new vscode.Range(position, position)
+              )
             )
-          }
+          }.toJSPromise
 
-        // return a promise of the items, useful for async but not needed here
-        val providerResultF =
-          jsUtils.newJsPromise(items.toJSArray)
+        statusBar.showSpininngStatusBarItem(s"functorcoder(${editorAPI.getLanguage()})", providerResultF)
 
         providerResultF.asInstanceOf[typings.vscode.mod.ProviderResult[
           scala.scalajs.js.Array[typings.vscode.mod.InlineCompletionItem] | typings.vscode.mod.InlineCompletionList
@@ -51,9 +50,7 @@ object inlineCompletions {
       }
 
     }
-  }
-
-  def registerInlineCompletions() = {
-    vscode.languages.registerInlineCompletionItemProvider(selector = "*", provider = createCompletionProvider())
+    vscode.languages
+      .registerInlineCompletionItemProvider(selector = "*", provider = mCompletionProvider)
   }
 }
