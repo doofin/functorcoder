@@ -37,22 +37,23 @@ Before loading the extension, you need to add options to vscode user settings, a
     }
 ```
 
+
+to try out, after cloning the project, run `sbt open` to open a debugging instance of VSCode with the extension loaded. Then the features like auto completion is ready to use.
+
 ## Project Structure
-The project is divided into two main parts: the core module and the VSCode extension module under /src/main/scala/functorcoder and /src/main/scala/vscextension respectively.
+The project is divided into **two main parts**: the core module and the VSCode extension module under /src/main/scala/functorcoder and /src/main/scala/vscextension respectively.
 
-**To get started**, read the file `extensionMain.scala` in the VSCode extension module. It is the main entry point for the extension. 
+To get started,  start with `extensionMain.scala`, the main entry point for the extension. 
 
-The first part is the core module, we aim keeping it concise. It contains the main logic of the ai coding assistant:
+The first part is the core module, the main logic of the ai coding assistant:
 - Large Language Model (LLM) integration
 - sending propmt to LLM and getting the response
 
-The second part is the VSCode extension module, which integrates the core module with the VSCode editor. It contains:
+The second part is the VSCode extension module, which integrates the core module with the VSCode editor:
 - commands: commands to be executed in the editor
 - code actions: quick fix actions
 - code completion: auto completion
 - editor ui: status bar, notifications, etc.
-  
-It's adopted from the [vscode-scalajs-hello](https://github.com/doofin/vscode-scalajs-hello) project. Refer to it for getting started with the VSCode extension development in Scala.js.
 
 
 project file structure for the core module:
