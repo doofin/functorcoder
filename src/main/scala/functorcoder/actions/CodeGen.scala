@@ -27,7 +27,6 @@ object CodeGen {
     val prompt = llmPrompt
       .Completion(codeWithHole = s"$codeBefore${llmPrompt.promptText.hole}$codeAfter")
 
-    // assistantMessage: String = promptText.prompt1
     llm.sendPrompt(prompt)
   }
 

@@ -82,14 +82,14 @@ The project file structure for the VSCode extension module:
 ```
 
 
-## design principles
-I am to design the system with mathematics, algebra and functional programming principles in mind. The system is designed to be modular and extensible, allowing for easy addition of new features and components.
+## design
+I aim to design the system with mathematics and functional programming principles in mind to make it modular and extensible, allowing for easy addition of new features. Ideally, each feature can be represented as a transformation from input to output, where input and output are:
 
     Input = {Query, CodeSnippet, Spec}: The set of all possible input types (queries, code snippets, or requirements/specifications).
 
     Output = {Code, Explanation, Transformation, DebugSuggestion}: The set of all possible outputs.
 
-The types and objects for Input:
+Further explaination of the input and output types:
 - code snippet or code file: a piece of code
 - code context: a code snippet with its surrounding code
 - query: natural language query 
@@ -101,9 +101,17 @@ The Output:
 - transformation: the transformation of the input code
 - suggestion: a suggestion for debugging or improvement or refactoring
 
-# feedback
+# implementation
+features implemented so far:
+- auto completion as you type like copilot
+- add documentation quick fix action(select a function, or some code, and Alt+Enter)
+
+Work in progress:
+- generate multiple files and folders as user specifies
+- disable/enable auto completion
+
 features to be implemented:
-- refactoring
+- select code and ask for refactoring(optimization, bug fixing, etc.)
 - specify which LLM to use
 - RAG(retrieval-augmented generation) to understand the whole code base
 - MCP(model context protocol) to interact with the environment, like external tools, etc.

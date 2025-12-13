@@ -21,7 +21,7 @@ object CodeActions {
   def registerCodeActions(context: vscode.ExtensionContext, llm: llmAgent) = {
 
     // https://scalablytyped.org/docs/encoding#jsnative
-    // we need to manually create the js object and cast it
+    // manually create the js object and cast it
     val mActionProvider =
       new js.Object {
         def createCodeAction(
@@ -46,8 +46,7 @@ object CodeActions {
 
               statusBar.showSpininngStatusBarItem(s"functorcoder($language)", llmResponse)
 
-              // there are no onSelect events for code actions
-              // so we need to create a command and set it here
+              // there are no onSelect events for code actions so we need to create a command and set it here
               // edit = new vscode.WorkspaceEdit() {
               //   showMessageAndLog("creating edit") // triggered immediately
               // }

@@ -29,6 +29,7 @@ object inlineCompletions {
         val codeBefore = document.getText(new vscode.Range(new vscode.Position(0, 0), position))
         val codeAfter = document.getText(new vscode.Range(position, document.positionAt(document.getText().length)))
 
+        // the core logic to get the completion from the llm
         val promptResponseF = CodeGen.getCompletion(codeBefore, codeAfter, llm)
 
         val providerResultF: Promise[scala.scalajs.js.Array[vscode.InlineCompletionItem]] =
